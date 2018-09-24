@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -13,9 +14,9 @@ namespace Asteroids
     public class MainModelView : INotifyPropertyChanged
     {
         public const int NUM_ROCKS = 5;
-        public const double VELOCITY = .0004;
+        public const double VELOCITY = 4;
         public const int HEIGHT = 100;
-        private static System.Timers.Timer aTimer;
+        private System.Timers.Timer aTimer;
 
         public MainModelView()
         {
@@ -33,26 +34,31 @@ namespace Asteroids
                 RockObject[i] = new Rock(startX, startY, velX, velY, HEIGHT, VELOCITY);
             }
             SetTimer();
-            aTimer.Stop();
-            aTimer.Dispose();
+            
+        }
+
+        private void SetTimer()
+        {
+            aTimer = new System.Timers.Timer(10);
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+            aTimer.Elapsed += ATimer_Elapsed;
+        }
+
+        private void ATimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
             for (int i = 0; i < NUM_ROCKS; i++)
             {
-                RockObject[i].XCoordinate += 50;//VELOCITY * RockObject[i].DeltaX;
-                RockObject[i].YCoordinate += 50; //VELOCITY * RockObject[i].DeltaY;
+                if (i == 0)
+                    Debug.WriteLine($"Rock0 x={RockObject[0].XCoordinate} y={RockObject[0].YCoordinate}");
+                RockObject[i].XCoordinate += VELOCITY * RockObject[i].DeltaX;
+                RockObject[i].YCoordinate += VELOCITY * RockObject[i].DeltaY;
                 if (RockObject[i].XCoordinate > 700)
                     RockObject[i].XCoordinate = 0;
                 if (RockObject[i].YCoordinate > 700)
                     RockObject[i].YCoordinate = 0;
             }
         }
-
-        private static void SetTimer()
-        {
-            aTimer = new System.Timers.Timer(5000);
-            aTimer.AutoReset = true;
-            aTimer.Enabled = true;
-        }
-
 
         public Rock[] RockObject { get; private set; }
         #region INotifyPropertyChanged Implementation
