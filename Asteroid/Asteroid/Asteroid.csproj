@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="MainModelView.cs" />
     <Compile Include="Rock.cs" />
+    <Compile Include="Ship.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -98,6 +99,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Asteroid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="starry.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ship.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

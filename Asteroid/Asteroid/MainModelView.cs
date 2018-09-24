@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Asteroids
 {
@@ -22,6 +23,7 @@ namespace Asteroids
         {
             Random rand = new Random();
             RockObject = new Rock[NUM_ROCKS];
+            Player1Ship = new Ship(400, 400, 90, 25, 0);
             double startX, startY, velX, velY;
 
             // initialize the asteroids position and direction
@@ -33,13 +35,26 @@ namespace Asteroids
                 velY = 2 * (rand.NextDouble()) - 1;
                 RockObject[i] = new Rock(startX, startY, velX, velY, HEIGHT, VELOCITY);
             }
+
+
             SetTimer();
-            
+
         }
+
+
+
+        protected void MainModelView_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.A || e.SystemKey == Key.A)
+            { Player1Ship.Theta += 1; }
+
+
+        }
+
 
         private void SetTimer()
         {
-            aTimer = new System.Timers.Timer(10);
+            aTimer = new System.Timers.Timer(1);
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
             aTimer.Elapsed += ATimer_Elapsed;
@@ -50,15 +65,19 @@ namespace Asteroids
             for (int i = 0; i < NUM_ROCKS; i++)
             {
                 if (i == 0)
-                    Debug.WriteLine($"Rock0 x={RockObject[0].XCoordinate} y={RockObject[0].YCoordinate}");
-                RockObject[i].XCoordinate += VELOCITY * RockObject[i].DeltaX;
+                    RockObject[i].XCoordinate += VELOCITY * RockObject[i].DeltaX;
                 RockObject[i].YCoordinate += VELOCITY * RockObject[i].DeltaY;
                 if (RockObject[i].XCoordinate > 700)
                     RockObject[i].XCoordinate = 0;
+                else if (RockObject[i].XCoordinate < 0)
+                    RockObject[i].XCoordinate = 700;
                 if (RockObject[i].YCoordinate > 700)
                     RockObject[i].YCoordinate = 0;
+                else if (RockObject[i].YCoordinate < 0)
+                    RockObject[i].YCoordinate = 700;
             }
         }
+        public Ship Player1Ship{get; private set;}
 
         public Rock[] RockObject { get; private set; }
         #region INotifyPropertyChanged Implementation
