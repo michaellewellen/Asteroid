@@ -26,8 +26,11 @@
     <Canvas>
         <Image Height="800"
                Source="starry.jpg" />
-        <Image Source="sparkball.png"
-               DataContext="{Binding Bullet}"/>
+        <Image Source="bullet.png"
+               DataContext="{Binding LaserBullet}"
+               Height="{Binding Height}"
+               Canvas.Left="{Binding XCoordinate}"
+               Canvas.Top="{Binding YCoordinate}" />
         <Image Height="{Binding Height}"
                Canvas.Left="{Binding XCoordinate}"
                Canvas.Top="{Binding YCoordinate}"

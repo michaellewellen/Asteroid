@@ -6,11 +6,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Asteroid
+namespace Asteroids
 {
-    class Bullet: INotifyPropertyChanged
+    public class Bullet: INotifyPropertyChanged
     {
-        public Bullet(double xCoordinate, double yCoordinate, double deltaX, double deltaY, double timeToLive, double height, double velocity, double theta)
+        public Bullet(double xCoordinate, double yCoordinate, double timeToLive, double height, double velocity)
         {
             XCoordinate = xCoordinate;
             YCoordinate = yCoordinate;
