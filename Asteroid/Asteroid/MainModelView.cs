@@ -61,6 +61,7 @@ namespace Asteroids
                     ?? (mainModelView_AKeyDown = new ActionCommand(() =>
                     {
                         MoveShipLeft();
+                        MoveShip();
                     }));
             }
         }
@@ -79,6 +80,7 @@ namespace Asteroids
                     ?? (mainModelView_DKeyDown = new ActionCommand(() =>
                     {
                         MoveShipRight();
+                        MoveShip();
                     }));
             }
         }
@@ -114,7 +116,24 @@ namespace Asteroids
                 Player1Ship.YCoordinate = 750;
         }
 
+        private ICommand mainModelView_SpaceKeyDown;
+        public ICommand MainModelView_SpaceKeyDown
+        {
 
+            get
+            {
+                return mainModelView_SpaceKeyDown
+                    ?? (mainModelView_SpaceKeyDown = new ActionCommand(() =>
+                    {
+                        ShootBullets();
+                    }));
+            }
+        }
+
+        protected void ShootBullets()
+        {
+           
+        }
 
         private void SetTimer()
         {
