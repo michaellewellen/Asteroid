@@ -8,7 +8,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace Asteroids
 {
@@ -24,6 +26,16 @@ namespace Asteroids
             Random rand = new Random();
             RockObject = new Rock[NUM_ROCKS];
             Player1Ship = new Ship(400, 400, 90, 25, 2*VELOCITY);
+
+            Bullet = new Image();
+            Canvas.SetTop(Bullet, 500);
+            Canvas.SetLeft(Bullet, 500);
+            BitmapImage sparkball = new BitmapImage();
+            sparkball.BeginInit();
+            sparkball.UriSource = new Uri("pack://application:,,,/sparkball.png");
+            sparkball.EndInit();
+            Bullet.Source = sparkball;
+
             double startX, startY, velX, velY, angle;
 
             // initialize the asteroids position and direction
@@ -132,7 +144,7 @@ namespace Asteroids
             }
         }
         public Ship Player1Ship { get; private set; }
-
+        public Image Bullet = new Image();
         public Rock[] RockObject { get; private set; }
         #region INotifyPropertyChanged Implementation
         public event PropertyChangedEventHandler PropertyChanged;
