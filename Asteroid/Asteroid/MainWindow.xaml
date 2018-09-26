@@ -20,10 +20,17 @@
                     Key="D" />
         <KeyBinding Command="{Binding MainModelView_WKeyDown}"
                     Key="W" />
+        <KeyBinding Command="{Binding MainModelView_SpaceKeyDown}"
+                    Key="Space" />
     </Window.InputBindings>
     <Canvas>
         <Image Height="800"
                Source="starry.jpg" />
+        <Image Source="bullet.png"
+               DataContext="{Binding LaserBullet}"
+               Height="{Binding Height}"
+               Canvas.Left="{Binding XCoordinate}"
+               Canvas.Top="{Binding YCoordinate}" />
         <Image Height="{Binding Height}"
                Canvas.Left="{Binding XCoordinate}"
                Canvas.Top="{Binding YCoordinate}"

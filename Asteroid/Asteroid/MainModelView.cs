@@ -19,13 +19,16 @@ namespace Asteroids
         public const int NUM_ROCKS = 5;
         public const int VELOCITY = 4;
         public const int HEIGHT = 100;
+        public const int TIME_TO_LIVE = 10;
         private System.Timers.Timer aTimer;
+        public int numBullet = 0;
 
         public MainModelView()
         {
             Random rand = new Random();
             RockObject = new Rock[NUM_ROCKS];
             Player1Ship = new Ship(400, 400, 90, 25, 2*VELOCITY);
+            //LaserBullet = new Bullet(400, 400, 10, 20, 3 * VELOCITY);
 
             Bullet = new Image();
             Canvas.SetTop(Bullet, 500);
@@ -61,6 +64,7 @@ namespace Asteroids
                     ?? (mainModelView_AKeyDown = new ActionCommand(() =>
                     {
                         MoveShipLeft();
+                        MoveShip();
                     }));
             }
         }
@@ -79,6 +83,7 @@ namespace Asteroids
                     ?? (mainModelView_DKeyDown = new ActionCommand(() =>
                     {
                         MoveShipRight();
+                        MoveShip();
                     }));
             }
         }
@@ -114,9 +119,47 @@ namespace Asteroids
                 Player1Ship.YCoordinate = 750;
         }
 
+        private ICommand mainModelView_SpaceKeyDown;
+        public ICommand MainModelView_SpaceKeyDown
+        {
 
+            get
+            {
+                return mainModelView_SpaceKeyDown
+                    ?? (mainModelView_SpaceKeyDown = new ActionCommand(() =>
+                    {
+                        ShootBullets();
+                    }));
+            }
+        }
 
-        private void SetTimer()
+        protected void ShootBullets()
+        {
+                LaserBulletObject[numBullet] = new Bullet(Player1Ship.XCoordinate, Player1Ship.YCoordinate, TIME_TO_LIVE, 20, VELOCITY);
+                LaserBulletObject[numBullet].XCoordinate += LaserBulletObject[numBullet].Velocity * Math.Cos((Math.PI * Player1Ship.Theta / 180));
+            LaserBulletObject[numBullet].YCoordinate += LaserBulletObject[numBullet].Velocity * Math.Sin((Math.PI * Player1Ship.Theta / 180));
+                SetBulletTimer();
+            numBullet ++;
+        }
+
+        private void SetBulletTimer()
+        {
+            aTimer = new System.Timers.Timer(1);
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+            aTimer.Elapsed += BulletTimer_Elapsed;
+        }
+
+        private void BulletTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            for (int i = 0; i < LaserBulletObject[i].TimeToLive; i++)
+            {
+            LaserBulletObject[i].XCoordinate += VELOCITY;
+            LaserBulletObject[i].YCoordinate += VELOCITY;
+            }
+        }
+
+            private void SetTimer()
         {
             aTimer = new System.Timers.Timer(1);
             aTimer.AutoReset = true;
@@ -144,6 +187,7 @@ namespace Asteroids
             }
         }
         public Ship Player1Ship { get; private set; }
+        public Bullet[] LaserBulletObject { get; private set; }
         public Image Bullet = new Image();
         public Rock[] RockObject { get; private set; }
         #region INotifyPropertyChanged Implementation
@@ -188,3 +232,4 @@ namespace Asteroids
 
     }
 }
+
