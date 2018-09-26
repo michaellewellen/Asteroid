@@ -135,7 +135,7 @@ namespace Asteroids
 
         protected void ShootBullets()
         {
-                LaserBulletObject[numBullet] = new Bullet(Player1Ship.XCoordinate + 10, Player1Ship.YCoordinate - 5, TIME_TO_LIVE, HEIGHT, VELOCITY);
+                LaserBulletObject[numBullet] = new Bullet(Player1Ship.XCoordinate, Player1Ship.YCoordinate, TIME_TO_LIVE, 20, VELOCITY);
                 LaserBulletObject[numBullet].XCoordinate += LaserBulletObject[numBullet].Velocity * Math.Cos((Math.PI * Player1Ship.Theta / 180));
             LaserBulletObject[numBullet].YCoordinate += LaserBulletObject[numBullet].Velocity * Math.Sin((Math.PI * Player1Ship.Theta / 180));
                 SetBulletTimer();
@@ -154,9 +154,8 @@ namespace Asteroids
         {
             for (int i = 0; i < LaserBulletObject[i].TimeToLive; i++)
             {
-            LaserBulletObject[i].XCoordinate += VELOCITY * LaserBulletObject[i].DeltaX;
-            LaserBulletObject[i].YCoordinate += VELOCITY * LaserBulletObject[i].DeltaY;
-            LaserBulletObject[i].Theta += 3 * LaserBulletObject[i].DeltaX;
+            LaserBulletObject[i].XCoordinate += VELOCITY;
+            LaserBulletObject[i].YCoordinate += VELOCITY;
             }
         }
 
