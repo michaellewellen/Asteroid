@@ -24,40 +24,27 @@ namespace Asteroids
         private double xCoordinate;
         private double yCoordinate;
         private double theta;
-        private double deltaX;
-        private double deltaY;
         private double height;
         private double velocity;
 
+                     
         
-        public double Theta
-        {
-            get { return theta; }
-            set { SetField(ref theta, value); }
-        }
         public double XCoordinate
         {
             get { return xCoordinate; }
             set { SetField(ref xCoordinate, value); }
         }
-
+        public double Theta
+        {
+            get { return theta; }
+            set { SetField(ref theta, value); }
+        }
         public double YCoordinate
         {
             get { return yCoordinate; }
             set { SetField(ref yCoordinate, value); }
         }
 
-        public double DeltaX
-        {
-            get { return Math.Cos(Theta); }
-            set { SetField(ref deltaX, value); }
-        }
-
-        public double DeltaY
-        {
-            get { return Math.Sin(Theta); }
-            set { SetField(ref deltaY, value); }
-        }
         public double Height
         {
             get { return height; }

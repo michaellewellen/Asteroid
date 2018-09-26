@@ -7,23 +7,32 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Height="800"
-        Width="800"
+        Width="1200"
         Background="Black"
        >
     <Window.DataContext>
         <local:MainModelView />
     </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding MainModelView_AKeyDown}"
+                    Key="A" />
+        <KeyBinding Command="{Binding MainModelView_DKeyDown}"
+                    Key="D" />
+        <KeyBinding Command="{Binding MainModelView_WKeyDown}"
+                    Key="W" />
+    </Window.InputBindings>
     <Canvas>
         <Image Height="800"
                Source="starry.jpg" />
-        <Image Height="25"
-               Canvas.Left="400"
-               Canvas.Top="400"
+        <Image Height="{Binding Height}"
+               Canvas.Left="{Binding XCoordinate}"
+               Canvas.Top="{Binding YCoordinate}"
                Source="ship.png"
-               DataContext="{Binding Player1Ship}"
-               KeyDown="MainModelView_OnKeyDown">
+               DataContext="{Binding Player1Ship}">
             <Image.RenderTransform>
-                <RotateTransform Angle="{Binding Theta}" />
+                <RotateTransform Angle="{Binding Theta}"
+                                 CenterX="12"
+                                 CenterY="12" />
             </Image.RenderTransform>
                     
         </Image>
@@ -31,26 +40,56 @@
                Height="{Binding Height}"
                Canvas.Left="{Binding XCoordinate}"
                Canvas.Top="{Binding YCoordinate}"
-               Source="Asteroid.png" />
+               Source="Asteroid.png">
+            <Image.RenderTransform>
+                <RotateTransform Angle="{Binding Theta}"
+                                 CenterX="50"
+                                 CenterY="50" />
+            </Image.RenderTransform>
+        </Image>
         <Image DataContext="{Binding RockObject[1]}"
                Height="{Binding Height}"
                Canvas.Left="{Binding XCoordinate}"
                Canvas.Top="{Binding YCoordinate}"
-               Source="Asteroid.png" />
+               Source="Asteroid.png">
+            <Image.RenderTransform>
+                <RotateTransform Angle="{Binding Theta}"
+                                 CenterX="50"
+                                 CenterY="50" />
+            </Image.RenderTransform>
+        </Image>
         <Image DataContext="{Binding RockObject[2]}"
                Height="{Binding Height}"
                Canvas.Left="{Binding XCoordinate}"
                Canvas.Top="{Binding YCoordinate}"
-               Source="Asteroid.png" />
+               Source="Asteroid.png">
+            <Image.RenderTransform>
+                <RotateTransform Angle="{Binding Theta}"
+                                 CenterX="50"
+                                 CenterY="50" />
+            </Image.RenderTransform>
+        </Image>
         <Image DataContext="{Binding RockObject[3]}"
                Height="{Binding Height}"
                Canvas.Left="{Binding XCoordinate}"
                Canvas.Top="{Binding YCoordinate}"
-               Source="Asteroid.png" />
+               Source="Asteroid.png">
+            <Image.RenderTransform>
+                <RotateTransform Angle="{Binding Theta}"
+                                 CenterX="50"
+                                 CenterY="50" />
+            </Image.RenderTransform>
+        </Image>
         <Image DataContext="{Binding RockObject[4]}"
                Height="{Binding Height}"
                Canvas.Left="{Binding XCoordinate}"
                Canvas.Top="{Binding YCoordinate}"
-               Source="Asteroid.png" />
+               Source="Asteroid.png">
+            <Image.RenderTransform>
+                <RotateTransform Angle="{Binding Theta}"
+                                 CenterX="50"
+                                 CenterY="50" />
+            </Image.RenderTransform>
+        </Image>
     </Canvas>
 </Window>

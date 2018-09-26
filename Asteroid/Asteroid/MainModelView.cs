@@ -15,7 +15,7 @@ namespace Asteroids
     public class MainModelView : INotifyPropertyChanged
     {
         public const int NUM_ROCKS = 5;
-        public const double VELOCITY = 4;
+        public const int VELOCITY = 4;
         public const int HEIGHT = 100;
         private System.Timers.Timer aTimer;
 
@@ -23,8 +23,8 @@ namespace Asteroids
         {
             Random rand = new Random();
             RockObject = new Rock[NUM_ROCKS];
-            Player1Ship = new Ship(400, 400, 90, 25, 0);
-            double startX, startY, velX, velY;
+            Player1Ship = new Ship(400, 400, 90, 25, 2*VELOCITY);
+            double startX, startY, velX, velY, angle;
 
             // initialize the asteroids position and direction
             for (int i = 0; i < NUM_ROCKS; i++)
@@ -33,23 +33,75 @@ namespace Asteroids
                 startY = 700 * (rand.NextDouble());
                 velX = 2 * (rand.NextDouble()) - 1;
                 velY = 2 * (rand.NextDouble()) - 1;
-                RockObject[i] = new Rock(startX, startY, velX, velY, HEIGHT, VELOCITY);
+                angle = 0;
+                RockObject[i] = new Rock(startX, startY, velX, velY, HEIGHT, VELOCITY, angle);
             }
-
-
             SetTimer();
-
         }
 
-
-
-        protected void MainModelView_OnKeyDown(object sender, KeyEventArgs e)
+        private ICommand mainModelView_AKeyDown;
+        public ICommand MainModelView_AKeyDown
         {
-            if (e.Key == Key.A || e.SystemKey == Key.A)
-            { Player1Ship.Theta += 1; }
 
-
+            get
+            {
+                return mainModelView_AKeyDown
+                    ?? (mainModelView_AKeyDown = new ActionCommand(() =>
+                    {
+                        MoveShipLeft();
+                    }));
+            }
         }
+        protected void MoveShipLeft()
+        {
+            Player1Ship.Theta -= 3;
+        }
+
+        private ICommand mainModelView_DKeyDown;
+        public ICommand MainModelView_DKeyDown
+        {
+
+            get
+            {
+                return mainModelView_DKeyDown
+                    ?? (mainModelView_DKeyDown = new ActionCommand(() =>
+                    {
+                        MoveShipRight();
+                    }));
+            }
+        }
+        protected void MoveShipRight()
+        {
+            Player1Ship.Theta += 3;
+        }
+
+        private ICommand mainModelView_WKeyDown;
+        public ICommand MainModelView_WKeyDown
+        {
+
+            get
+            {
+                return mainModelView_WKeyDown
+                    ?? (mainModelView_WKeyDown = new ActionCommand(() =>
+                    {
+                        MoveShip();
+                    }));
+            }
+        }
+        protected void MoveShip()
+        {
+            Player1Ship.XCoordinate += Player1Ship.Velocity * Math.Cos((Math.PI*Player1Ship.Theta/180));
+            Player1Ship.YCoordinate += Player1Ship.Velocity * Math.Sin((Math.PI*Player1Ship.Theta/180));
+            if (Player1Ship.XCoordinate > 1150)
+                Player1Ship.XCoordinate = -50;
+            else if (Player1Ship.XCoordinate < -50)
+                Player1Ship.XCoordinate = 1150;
+            if (Player1Ship.YCoordinate > 750)
+                Player1Ship.YCoordinate = -50;
+            else if (Player1Ship.YCoordinate < -50)
+                Player1Ship.YCoordinate = 750;
+        }
+
 
 
         private void SetTimer()
@@ -64,20 +116,22 @@ namespace Asteroids
         {
             for (int i = 0; i < NUM_ROCKS; i++)
             {
-                if (i == 0)
-                    RockObject[i].XCoordinate += VELOCITY * RockObject[i].DeltaX;
+
+                RockObject[i].XCoordinate += VELOCITY * RockObject[i].DeltaX;
                 RockObject[i].YCoordinate += VELOCITY * RockObject[i].DeltaY;
-                if (RockObject[i].XCoordinate > 700)
-                    RockObject[i].XCoordinate = 0;
-                else if (RockObject[i].XCoordinate < 0)
-                    RockObject[i].XCoordinate = 700;
-                if (RockObject[i].YCoordinate > 700)
-                    RockObject[i].YCoordinate = 0;
-                else if (RockObject[i].YCoordinate < 0)
-                    RockObject[i].YCoordinate = 700;
+                RockObject[i].Theta += 3 * RockObject[i].DeltaX;
+                
+                if (RockObject[i].XCoordinate > 1150)
+                    RockObject[i].XCoordinate = -50;
+                else if (RockObject[i].XCoordinate <-50)
+                    RockObject[i].XCoordinate = 1150;
+                if (RockObject[i].YCoordinate > 750)
+                    RockObject[i].YCoordinate = -50;
+                else if (RockObject[i].YCoordinate < -50)
+                    RockObject[i].YCoordinate = 750;
             }
         }
-        public Ship Player1Ship{get; private set;}
+        public Ship Player1Ship { get; private set; }
 
         public Rock[] RockObject { get; private set; }
         #region INotifyPropertyChanged Implementation
@@ -86,6 +140,29 @@ namespace Asteroids
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public class ActionCommand : ICommand
+        {
+            private readonly Action _action;
+
+            public ActionCommand(Action action)
+            {
+                _action = action;
+            }
+
+            public void Execute(object parameter)
+            {
+                _action();
+            }
+
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
+
+            public event EventHandler CanExecuteChanged;
+        }
+
 
         protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {

@@ -11,7 +11,7 @@ namespace Asteroids
 {
     public class Rock : INotifyPropertyChanged
     {
-        public Rock(double xCoordinate, double yCoordinate, double deltaX, double deltaY, double height, double velocity)
+        public Rock(double xCoordinate, double yCoordinate, double deltaX, double deltaY, double height, double velocity, double theta)
         {
             XCoordinate = xCoordinate;
             YCoordinate = yCoordinate;
@@ -19,6 +19,7 @@ namespace Asteroids
             DeltaY = deltaY;
             Height = height;
             Velocity = velocity;
+            Theta = theta;
         }
 
         private double xCoordinate;
@@ -27,6 +28,7 @@ namespace Asteroids
         private double deltaY;
         private double height;
         private double velocity;
+        private double theta;
 
         public double XCoordinate
         {
@@ -61,6 +63,12 @@ namespace Asteroids
         {
             get { return velocity; }
             set { SetField(ref velocity, value); }
+        }
+
+        public double Theta
+        {
+            get { return theta; }
+            set { SetField(ref theta, value); }
         }
 
         #region INotifyPropertyChanged Implementation
