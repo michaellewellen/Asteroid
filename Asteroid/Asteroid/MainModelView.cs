@@ -20,7 +20,7 @@ namespace Asteroids
             Random rand = new Random();
             Rock = new SpaceObject[NUM_ROCKS];
             Bullet = new SpaceObject[NUM_BULLETS];
-            Player1Ship = new SpaceObject('S',400, 400, 25, 2*VELOCITY, -90);
+            Player1Ship = new SpaceObject('S',600, 400, 25, 2*VELOCITY, -90);
             listOfSpaceObjects = new ObservableCollection<SpaceObject>();
             listOfSpaceObjects.Add(Player1Ship); 
            
@@ -79,7 +79,8 @@ namespace Asteroids
 
         public void FireBullet()
         {
-            Bullet[numBullet] = new SpaceObject('B', Player1Ship.XCoordinate + 12, Player1Ship.YCoordinate + 12, 50, 4 * VELOCITY, Player1Ship.Theta);
+            Bullet[numBullet] = new SpaceObject('B', Player1Ship.XCoordinate, Player1Ship.YCoordinate, 10, 4 * VELOCITY, Player1Ship.Theta);
+            listOfSpaceObjects.Add(Bullet[numBullet]);
             numBullet++;
         }
         
@@ -200,10 +201,6 @@ namespace Asteroids
             return true;
         }
         #endregion
-
-    }
-
-    
         
-    
+    }
 }

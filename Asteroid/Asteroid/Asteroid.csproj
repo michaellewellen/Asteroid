@@ -56,6 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bullet.cs" />
+    <Compile Include="ItemChangeObservableCollection.cs" />
     <Compile Include="MainModelView.cs" />
     <Compile Include="Rock.cs" />
     <Compile Include="Ship.cs" />
@@ -112,10 +113,10 @@
     <Resource Include="purple.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="sparkball.png" />
+    <Resource Include="fireball.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="fireball.png" />
+    <Resource Include="sparkball.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

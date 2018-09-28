@@ -68,7 +68,7 @@
             </Image.RenderTransform>
                     
         </Image>-->
-        <!--Image DataContext="{Binding RockObject[0]}"
+        <!--<Image DataContext="{Binding RockObject[0]}"
                Height="{Binding Height}"
                Canvas.Left="{Binding XCoordinate}"
                Canvas.Top="{Binding YCoordinate}"
