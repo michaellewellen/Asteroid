@@ -11,17 +11,17 @@ namespace Asteroids
 {
     public class Rock : INotifyPropertyChanged
     {
-        public Rock(double xCoordinate, double yCoordinate, double deltaX, double deltaY, double height, double velocity, double theta)
+        public Rock(double xCoordinate, double yCoordinate, double height, double velocity, double theta)
         {
             XCoordinate = xCoordinate;
             YCoordinate = yCoordinate;
-            DeltaX = deltaX;
-            DeltaY = deltaY;
             Height = height;
             Velocity = velocity;
+            OriginalAngle = theta;
             Theta = theta;
         }
 
+        private double OriginalAngle;
         private double xCoordinate;
         private double yCoordinate;
         private double deltaX;

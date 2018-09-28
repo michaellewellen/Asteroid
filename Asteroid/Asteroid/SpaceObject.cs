@@ -5,32 +5,50 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace Asteroids
 {
-    public class Ship : INotifyPropertyChanged
+    public class SpaceObject
     {
-
-        public Ship(double xCoordinate, double yCoordinate, double theta, double height, double velocity)
+        public SpaceObject(char type, double xCoordinate, double yCoordinate, double height, double velocity, double theta)
         {
+            if (type == 'S')
+            {
+                _Image = new BitmapImage(new Uri(@"/ship.png", UriKind.Relative));
+            }
+            else if (type == 'B')
+            {
+                _Image = new BitmapImage(new Uri(@"/sparkball.png", UriKind.Relative));
+            }
+            else if (type == 'R')
+            {
+                _Image = new BitmapImage(new Uri(@"/Asteroid.png", UriKind.Relative));
+            }
             XCoordinate = xCoordinate;
             YCoordinate = yCoordinate;
+            OriginalAngle = theta;
             Theta = theta;
             Height = height;
             Velocity = velocity;
-            _Image = new BitmapImage(new Uri(@"/ship.png", UriKind.Relative));
-            
-        }
+           
 
+
+        }
+        private double originalAngle;
         private double xCoordinate;
         private double yCoordinate;
         private double theta;
         private double height;
         private double velocity;
         private BitmapImage _image;
-                     
+
+        public double OriginalAngle
+        {
+            get { return originalAngle; }
+            set { SetField(ref originalAngle, value); }
+        }
+
         public BitmapImage _Image
         {
             get { return _image; }
@@ -83,5 +101,3 @@ namespace Asteroids
         #endregion
     }
 }
-
-

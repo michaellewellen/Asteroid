@@ -1,54 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 
 namespace Asteroids
 {
     public class MainModelView : INotifyPropertyChanged
     {
-        public const int NUM_ROCKS = 5;
+        public const int NUM_ROCKS = 15;
+        public const int NUM_BULLETS = 10000;
         public const int VELOCITY = 4;
         public const int HEIGHT = 100;
         private System.Timers.Timer aTimer;
-
+        private int numBullet = 0;
         public MainModelView()
         {
             Random rand = new Random();
-            RockObject = new Rock[NUM_ROCKS];
-            Player1Ship = new Ship(400, 400, 90, 25, 2*VELOCITY);
-
-            Bullet = new Image();
-            Canvas.SetTop(Bullet, 500);
-            Canvas.SetLeft(Bullet, 500);
-            BitmapImage sparkball = new BitmapImage();
-            sparkball.BeginInit();
-            sparkball.UriSource = new Uri("pack://application:,,,/sparkball.png");
-            sparkball.EndInit();
-            Bullet.Source = sparkball;
-
-            double startX, startY, velX, velY, angle;
-
+            Rock = new SpaceObject[NUM_ROCKS];
+            Bullet = new SpaceObject[NUM_BULLETS];
+            Player1Ship = new SpaceObject('S',400, 400, 25, 2*VELOCITY, -90);
+            listOfSpaceObjects = new ObservableCollection<SpaceObject>();
+            listOfSpaceObjects.Add(Player1Ship); 
+           
+            double startX, startY, angle;
+            
             // initialize the asteroids position and direction
             for (int i = 0; i < NUM_ROCKS; i++)
             {
-                startX = 700 * (rand.NextDouble());
+                startX = 1100 * (rand.NextDouble());
                 startY = 700 * (rand.NextDouble());
-                velX = 2 * (rand.NextDouble()) - 1;
-                velY = 2 * (rand.NextDouble()) - 1;
-                angle = 0;
-                RockObject[i] = new Rock(startX, startY, velX, velY, HEIGHT, VELOCITY, angle);
+                angle = 360 * (rand.NextDouble());
+                Rock[i] = new SpaceObject('R',startX, startY, HEIGHT, VELOCITY, angle);
+                listOfSpaceObjects.Add(Rock[i]);
             }
             SetTimer();
+        }
+
+        private ObservableCollection<SpaceObject> listOfSpaceObjects;
+        public ObservableCollection<SpaceObject> ListOfSpaceObjects
+        {
+            get { return listOfSpaceObjects; }
         }
 
         private ICommand mainModelView_AKeyDown;
@@ -64,10 +57,32 @@ namespace Asteroids
                     }));
             }
         }
+
         protected void MoveShipLeft()
         {
             Player1Ship.Theta -= 3;
         }
+
+        private ICommand mainModelView_SpaceKeyDown;
+        public ICommand MainModelView_SpaceKeyDown
+        {
+
+            get
+            {
+                return mainModelView_SpaceKeyDown
+                    ?? (mainModelView_SpaceKeyDown = new ActionCommand(() =>
+                    {
+                        FireBullet();
+                    }));
+            }
+        }
+
+        public void FireBullet()
+        {
+            Bullet[numBullet] = new SpaceObject('B', Player1Ship.XCoordinate + 12, Player1Ship.YCoordinate + 12, 50, 4 * VELOCITY, Player1Ship.Theta);
+            numBullet++;
+        }
+        
 
         private ICommand mainModelView_DKeyDown;
         public ICommand MainModelView_DKeyDown
@@ -129,23 +144,23 @@ namespace Asteroids
             for (int i = 0; i < NUM_ROCKS; i++)
             {
 
-                RockObject[i].XCoordinate += VELOCITY * RockObject[i].DeltaX;
-                RockObject[i].YCoordinate += VELOCITY * RockObject[i].DeltaY;
-                RockObject[i].Theta += 3 * RockObject[i].DeltaX;
+                Rock[i].XCoordinate += VELOCITY * Math.Cos(Math.PI * Rock[i].Theta / 180);
+                Rock[i].YCoordinate += VELOCITY * Math.Sin(Math.PI * Rock[i].Theta / 180);
+                Rock[i].OriginalAngle += 3 * Math.Cos(Math.PI * Rock[i].Theta / 180);
                 
-                if (RockObject[i].XCoordinate > 1150)
-                    RockObject[i].XCoordinate = -50;
-                else if (RockObject[i].XCoordinate <-50)
-                    RockObject[i].XCoordinate = 1150;
-                if (RockObject[i].YCoordinate > 750)
-                    RockObject[i].YCoordinate = -50;
-                else if (RockObject[i].YCoordinate < -50)
-                    RockObject[i].YCoordinate = 750;
+                if (Rock[i].XCoordinate > 1150)
+                    Rock[i].XCoordinate = -50;
+                else if (Rock[i].XCoordinate <-50)
+                    Rock[i].XCoordinate = 1150;
+                if (Rock[i].YCoordinate > 750)
+                    Rock[i].YCoordinate = -50;
+                else if (Rock[i].YCoordinate < -50)
+                    Rock[i].YCoordinate = 750;
             }
         }
-        public Ship Player1Ship { get; private set; }
-        public Image Bullet = new Image();
-        public Rock[] RockObject { get; private set; }
+        public SpaceObject Player1Ship { get; private set; }
+        public SpaceObject[] Bullet { get; private set; }
+        public SpaceObject[] Rock { get; private set; }
         #region INotifyPropertyChanged Implementation
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -187,4 +202,8 @@ namespace Asteroids
         #endregion
 
     }
+
+    
+        
+    
 }

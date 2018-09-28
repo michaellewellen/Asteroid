@@ -59,6 +59,7 @@
     <Compile Include="MainModelView.cs" />
     <Compile Include="Rock.cs" />
     <Compile Include="Ship.cs" />
+    <Compile Include="SpaceObject.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

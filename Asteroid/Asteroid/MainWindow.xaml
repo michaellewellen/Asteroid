@@ -20,11 +20,43 @@
                     Key="D" />
         <KeyBinding Command="{Binding MainModelView_WKeyDown}"
                     Key="W" />
+        <KeyBinding Command="{Binding MainModelView_SpaceKeyDown}"
+                    Key="Space"/>
     </Window.InputBindings>
     <Canvas>
         <Image Height="800"
                Source="starry.jpg" />
-        <Image Height="{Binding Height}"
+
+        <ItemsControl ItemsSource="{Binding Path=ListOfSpaceObjects}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding XCoordinate}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding YCoordinate}"/>
+
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Image 
+                            Height="{Binding Height}"
+                            Canvas.Left="{Binding XCoordinate}"
+                            Canvas.Top="{Binding YCoordinate}"
+                            Source="{Binding _Image}">
+                    <Image.RenderTransform>
+                        <RotateTransform Angle="{Binding Theta}"
+                                 CenterX="12"
+                                 CenterY="12" />
+                    </Image.RenderTransform>
+                    </Image>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <!--<Image Height="{Binding Height}"
                Canvas.Left="{Binding XCoordinate}"
                Canvas.Top="{Binding YCoordinate}"
                Source="ship.png"
@@ -35,8 +67,8 @@
                                  CenterY="12" />
             </Image.RenderTransform>
                     
-        </Image>
-        <Image DataContext="{Binding RockObject[0]}"
+        </Image>-->
+        <!--Image DataContext="{Binding RockObject[0]}"
                Height="{Binding Height}"
                Canvas.Left="{Binding XCoordinate}"
                Canvas.Top="{Binding YCoordinate}"
@@ -90,6 +122,6 @@
                                  CenterX="50"
                                  CenterY="50" />
             </Image.RenderTransform>
-        </Image>
+        </Image>-->
     </Canvas>
 </Window>
