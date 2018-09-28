@@ -118,5 +118,8 @@
   <ItemGroup>
     <Resource Include="sparkball.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bullet.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
