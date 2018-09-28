@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -9,7 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace Asteroids
 {
-    public class SpaceObject
+    public class SpaceObject :INotifyPropertyChanged
     {
         public SpaceObject(char type, double xCoordinate, double yCoordinate, double height, double velocity, double theta)
         {
@@ -35,6 +36,7 @@ namespace Asteroids
 
 
         }
+        
         private double originalAngle;
         private double xCoordinate;
         private double yCoordinate;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -37,7 +38,7 @@ namespace Asteroids
             }
             SetTimer();
         }
-
+                
         private ObservableCollection<SpaceObject> listOfSpaceObjects;
         public ObservableCollection<SpaceObject> ListOfSpaceObjects
         {
@@ -118,6 +119,7 @@ namespace Asteroids
         }
         protected void MoveShip()
         {
+            listOfSpaceObjects.Remove(Player1Ship);
             Player1Ship.XCoordinate += Player1Ship.Velocity * Math.Cos((Math.PI*Player1Ship.Theta/180));
             Player1Ship.YCoordinate += Player1Ship.Velocity * Math.Sin((Math.PI*Player1Ship.Theta/180));
             if (Player1Ship.XCoordinate > 1150)
@@ -128,6 +130,7 @@ namespace Asteroids
                 Player1Ship.YCoordinate = -50;
             else if (Player1Ship.YCoordinate < -50)
                 Player1Ship.YCoordinate = 750;
+            listOfSpaceObjects.Add(Player1Ship);
         }
 
 
@@ -144,7 +147,6 @@ namespace Asteroids
         {
             for (int i = 0; i < NUM_ROCKS; i++)
             {
-
                 Rock[i].XCoordinate += VELOCITY * Math.Cos(Math.PI * Rock[i].Theta / 180);
                 Rock[i].YCoordinate += VELOCITY * Math.Sin(Math.PI * Rock[i].Theta / 180);
                 Rock[i].OriginalAngle += 3 * Math.Cos(Math.PI * Rock[i].Theta / 180);
@@ -162,13 +164,7 @@ namespace Asteroids
         public SpaceObject Player1Ship { get; private set; }
         public SpaceObject[] Bullet { get; private set; }
         public SpaceObject[] Rock { get; private set; }
-        #region INotifyPropertyChanged Implementation
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        
         public class ActionCommand : ICommand
         {
             private readonly Action _action;
@@ -191,6 +187,12 @@ namespace Asteroids
             public event EventHandler CanExecuteChanged;
         }
 
+        #region INotifyPropertyChanged Implementation
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
@@ -201,6 +203,7 @@ namespace Asteroids
             return true;
         }
         #endregion
-        
+
+
     }
 }
