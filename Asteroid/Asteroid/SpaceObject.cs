@@ -26,17 +26,23 @@ namespace Asteroids
             {
                 _Image = new BitmapImage(new Uri(@"/Asteroid.png", UriKind.Relative));
             }
+
+            else if (type == 'G')
+            {
+                _Image = new BitmapImage(new Uri(@"/gameover.png", UriKind.Relative));
+            }
             XCoordinate = xCoordinate;
             YCoordinate = yCoordinate;
             OriginalAngle = theta;
             Theta = theta;
             Height = height;
             Velocity = velocity;
-           
+            NumberOfHits = 0;
 
 
         }
-        
+
+        private int numberOfHits;
         private double originalAngle;
         private double xCoordinate;
         private double yCoordinate;
@@ -44,6 +50,12 @@ namespace Asteroids
         private double height;
         private double velocity;
         private BitmapImage _image;
+
+        public int NumberOfHits
+        {
+            get { return numberOfHits; }
+            set { SetField(ref numberOfHits, value); }
+        }
 
         public double OriginalAngle
         {
