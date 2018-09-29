@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -10,8 +11,10 @@ namespace Asteroids
 {
     public class MainModelView : INotifyPropertyChanged
     {
+        public const int WINDOWHEIGHT = 800;
+        public const int WINDOWWIDTH = 1200;
         public const int NUM_ROCKS = 15;
-        public const int NUM_BULLETS = 10000;
+        public const int NUM_BULLETS = 20;
         public const int VELOCITY = 4;
         public const int HEIGHT = 100;
         private System.Timers.Timer aTimer;
@@ -80,6 +83,8 @@ namespace Asteroids
 
         public void FireBullet()
         {
+            if (numBullet >= NUM_BULLETS)
+                return;
             Bullet[numBullet] = new SpaceObject('B', Player1Ship.XCoordinate, Player1Ship.YCoordinate, 10, 4 * VELOCITY, Player1Ship.Theta);
             listOfSpaceObjects.Add(Bullet[numBullet]);
             numBullet++;
@@ -122,14 +127,14 @@ namespace Asteroids
             listOfSpaceObjects.Remove(Player1Ship);
             Player1Ship.XCoordinate += Player1Ship.Velocity * Math.Cos((Math.PI*Player1Ship.Theta/180));
             Player1Ship.YCoordinate += Player1Ship.Velocity * Math.Sin((Math.PI*Player1Ship.Theta/180));
-            if (Player1Ship.XCoordinate > 1150)
+            if (Player1Ship.XCoordinate > WINDOWWIDTH - 50)
                 Player1Ship.XCoordinate = -50;
             else if (Player1Ship.XCoordinate < -50)
-                Player1Ship.XCoordinate = 1150;
-            if (Player1Ship.YCoordinate > 750)
+                Player1Ship.XCoordinate = WINDOWWIDTH-50;
+            if (Player1Ship.YCoordinate > WINDOWHEIGHT - 50)
                 Player1Ship.YCoordinate = -50;
             else if (Player1Ship.YCoordinate < -50)
-                Player1Ship.YCoordinate = 750;
+                Player1Ship.YCoordinate = WINDOWHEIGHT - 50;
             listOfSpaceObjects.Add(Player1Ship);
         }
 
@@ -145,21 +150,39 @@ namespace Asteroids
 
         private void ATimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            for (int i = 0; i < NUM_ROCKS; i++)
+            foreach (SpaceObject r in Rock)
             {
-                Rock[i].XCoordinate += VELOCITY * Math.Cos(Math.PI * Rock[i].Theta / 180);
-                Rock[i].YCoordinate += VELOCITY * Math.Sin(Math.PI * Rock[i].Theta / 180);
-                Rock[i].OriginalAngle += 3 * Math.Cos(Math.PI * Rock[i].Theta / 180);
+                r.XCoordinate += r.Velocity * Math.Cos(Math.PI * r.Theta / 180);
+                r.YCoordinate += r.Velocity * Math.Sin(Math.PI * r.Theta / 180);
+                r.OriginalAngle += 3 * Math.Cos(Math.PI * r.Theta / 180);
                 
-                if (Rock[i].XCoordinate > 1150)
-                    Rock[i].XCoordinate = -50;
-                else if (Rock[i].XCoordinate <-50)
-                    Rock[i].XCoordinate = 1150;
-                if (Rock[i].YCoordinate > 750)
-                    Rock[i].YCoordinate = -50;
-                else if (Rock[i].YCoordinate < -50)
-                    Rock[i].YCoordinate = 750;
+                if (r.XCoordinate > WINDOWWIDTH-50)
+                    r.XCoordinate = -50;
+                else if (r.XCoordinate <-50)
+                    r.XCoordinate = WINDOWWIDTH-50;
+                if (r.YCoordinate > WINDOWHEIGHT - 50)
+                    r.YCoordinate = -50;
+                else if (r.YCoordinate < -50)
+                    r.YCoordinate = WINDOWHEIGHT-50;
             }
+            
+            foreach (SpaceObject b in Bullet)
+            {
+                if (b != null)
+                {
+                    b.XCoordinate += b.Velocity * Math.Cos(Math.PI * b.Theta / 180);
+                    b.YCoordinate += b.Velocity * Math.Sin(Math.PI * b.Theta / 180);
+                    b.OriginalAngle += 3 * Math.Cos(Math.PI * b.Theta / 180);
+                    // if it hits the edges, remove the bullet from the list
+                    //if (b.XCoordinate > WINDOWWIDTH - 50 || b.XCoordinate < -50 || b.YCoordinate > WINDOWHEIGHT - 50 || b.YCoordinate < -50)
+                    //{
+                        
+                    //    listOfSpaceObjects.Remove(b);
+                    //    numBullet--;
+                    //}
+                }
+            }
+            
         }
         public SpaceObject Player1Ship { get; private set; }
         public SpaceObject[] Bullet { get; private set; }
@@ -186,6 +209,7 @@ namespace Asteroids
 
             public event EventHandler CanExecuteChanged;
         }
+        
 
         #region INotifyPropertyChanged Implementation
         public event PropertyChangedEventHandler PropertyChanged;
