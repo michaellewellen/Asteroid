@@ -14,7 +14,7 @@ namespace Asteroids
     {
         public const int WINDOWHEIGHT = 800;
         public const int WINDOWWIDTH = 1200;
-        public const int NUM_ROCKS = 1;
+        public const int NUM_ROCKS = 5;
         public const int NUM_BULLETS = 20;
         public const int VELOCITY = 4;
         public const int HEIGHT = 100;
@@ -33,7 +33,10 @@ namespace Asteroids
             Rock = new SpaceObject[NUM_ROCKS*4];
             Bullet = new SpaceObject[NUM_BULLETS];
 
-            //  Initialize a game as starting with 
+            temp = new SpaceObject('G', 400, 250, 0, 0, 0);
+            winGame = new SpaceObject('A', 400, 250, 0, 0, 0);
+          
+
 
             // Initialize a Ship pointing up, no velocity in middle of the board
             Player1Ship = new SpaceObject('S', 600, 400, 25, 0, -90);
@@ -42,6 +45,8 @@ namespace Asteroids
             BindingOperations.EnableCollectionSynchronization(listOfSpaceObjects, listLock);
 
             listOfSpaceObjects.Add(Player1Ship);
+            listOfSpaceObjects.Add(temp);
+            listOfSpaceObjects.Add(winGame);
             double startX, startY, angle;
 
             // initialize the asteroids position and direction
@@ -50,9 +55,11 @@ namespace Asteroids
                 startX = 1100 * (rand.NextDouble());
                 startY = 700 * (rand.NextDouble());
                 angle = 360 * (rand.NextDouble());
-                Rock[i] = new SpaceObject('R', startX, startY, HEIGHT, VELOCITY, angle);
+                Rock[i] = new SpaceObject('R', startX, startY, HEIGHT, VELOCITY/2, angle);
                 listOfSpaceObjects.Add(Rock[i]);
             }
+            
+                
                 SetTimer();
             
         }
@@ -175,7 +182,12 @@ namespace Asteroids
 
         private void ATimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-
+            // Check for Game Over
+            if (numShips == 0)
+                temp.Height = 200;
+            // Check for win
+            if (numAsteroids <= 0)
+                winGame.Height = 200;
             //// Move the rocks
             foreach (SpaceObject r in Rock)
             {
@@ -288,19 +300,20 @@ namespace Asteroids
         public void ShipHit()
         {
             // Maybe some explosion noise, and an explosion graphic?
-            if (Player1Ship.NumberOfHits < 3)
+            
             {
                 Player1Ship.Velocity = 0;
                 Player1Ship.XCoordinate = 600;
                 Player1Ship.YCoordinate = 400;
+                numShips--;
             }
-            else
-            {
-                listOfSpaceObjects.Remove(Player1Ship);
-                SpaceObject temp = new SpaceObject('G', 400, 300, 200, 0, 0);
-                listOfSpaceObjects.Add(temp);
+            //else
+            //{
+            //    listofspaceobjects.remove(player1ship);
+            //    spaceobject temp = new spaceobject('g', 400, 300, 200, 0, 0);
+            //    listofspaceobjects.add(temp);
 
-            }
+            //}
         }
         public SpaceObject Player1Ship { get; private set; }
         public SpaceObject[] Bullet { get; private set; }
@@ -308,6 +321,8 @@ namespace Asteroids
         public object listLock { get; private set; }
         public int numAsteroids { get; private set; }
         public int numShips { get; private set; }
+        public SpaceObject temp { get; private set; }
+        public SpaceObject winGame { get; private set; }
         
         public class ActionCommand : ICommand
         {

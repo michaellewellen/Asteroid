@@ -31,6 +31,11 @@ namespace Asteroids
             {
                 _Image = new BitmapImage(new Uri(@"/gameover.png", UriKind.Relative));
             }
+
+            else if (type == 'A')
+            {
+                _Image = new BitmapImage(new Uri(@"/youwin.png", UriKind.Relative));        
+            }
             XCoordinate = xCoordinate;
             YCoordinate = yCoordinate;
             OriginalAngle = theta;
