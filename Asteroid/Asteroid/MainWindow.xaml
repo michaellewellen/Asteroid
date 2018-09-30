@@ -46,11 +46,12 @@
                             Height="{Binding Height}"
                             Canvas.Left="{Binding XCoordinate}"
                             Canvas.Top="{Binding YCoordinate}"
-                            Source="{Binding _Image}">
+                            Source="{Binding _Image}"
+                        >
                     <Image.RenderTransform>
                         <RotateTransform Angle="{Binding Theta}"
-                                 CenterX="12"
-                                 CenterY="12" />
+                                 CenterX="{Binding CX}"
+                                 CenterY="{Binding CY}" />
                     </Image.RenderTransform>
                     </Image>
                 </DataTemplate>

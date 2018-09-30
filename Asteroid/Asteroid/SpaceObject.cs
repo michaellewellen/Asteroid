@@ -36,6 +36,8 @@ namespace Asteroids
             OriginalAngle = theta;
             Theta = theta;
             Height = height;
+            CX = Height / 2;
+            CY = Height / 2;
             Velocity = velocity;
             NumberOfHits = 0;
 
@@ -50,6 +52,8 @@ namespace Asteroids
         private double height;
         private double velocity;
         private BitmapImage _image;
+        private double cX;
+        private double cY;
 
         public int NumberOfHits
         {
@@ -61,6 +65,18 @@ namespace Asteroids
         {
             get { return originalAngle; }
             set { SetField(ref originalAngle, value); }
+        }
+
+        public double CX
+        {
+            get { return cX; }
+            set { SetField(ref cX, value); }
+        }
+
+        public double CY
+        {
+            get { return cY; }
+            set { SetField(ref cY, value); }
         }
 
         public BitmapImage _Image
