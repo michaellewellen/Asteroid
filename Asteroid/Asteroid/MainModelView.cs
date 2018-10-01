@@ -60,9 +60,22 @@ namespace Asteroids
             }
             
                 
-                SetTimer();
-            
+            SetTimer();
+
+            //  Making a Master list for HW #5
+            _pictureList = new ObservableCollection<Pictures>();
+
+            NewPicture = new Pictures(1, "Asteroid");
+            NewPicture.ListOfNewPictures.Add(new Details("Asteroid", "Asteroid.png"));
+            _pictureList.Add(NewPicture);
+
+            NewPicture = new Pictures(2, "Ship");
+            NewPicture.Info.Add(new Details("Ship", "ship.png"));
+            NewPicture.Info.Add(new Details("Ship", "shipwithflames.png"));
+            _pictureList.Add(NewPicture);
         }
+
+      
 
         private ObservableCollection<SpaceObject> listOfSpaceObjects;
         public ObservableCollection<SpaceObject> ListOfSpaceObjects
