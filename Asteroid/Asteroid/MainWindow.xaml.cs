@@ -23,8 +23,18 @@ namespace Asteroids
         public MainWindow()
         {
             InitializeComponent();
-
         }
-       
+
+        private void PlayAgain (object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
+        }
+
+        private void QuitGame (object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
+
     }
 }

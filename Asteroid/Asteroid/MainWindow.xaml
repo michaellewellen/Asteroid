@@ -26,6 +26,16 @@
     <Canvas>
         <Image Height="800"
                Source="starry.jpg" />
+        <Menu Background="DarkGray"
+              Foreground="Black">
+            <MenuItem Header="_File">
+                <MenuItem Header="_PlayAgain"
+                          Click="PlayAgain" />
+                <MenuItem Header="_Quit" Click="QuitGame" />
+
+
+            </MenuItem>
+        </Menu>
 
         <ItemsControl ItemsSource="{Binding Path=ListOfSpaceObjects}">
             <ItemsControl.ItemsPanel>

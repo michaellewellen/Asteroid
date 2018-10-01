@@ -111,7 +111,7 @@ namespace Asteroids
             {
                 if (numBullet >= NUM_BULLETS)
                 numBullet = 0;
-                Bullet[numBullet] = new SpaceObject('B', Player1Ship.XCoordinate, Player1Ship.YCoordinate, 10, 4 * VELOCITY, Player1Ship.Theta);
+                Bullet[numBullet] = new SpaceObject('B', Player1Ship.XCoordinate+8, Player1Ship.YCoordinate+8, 10, 4 * VELOCITY, Player1Ship.Theta);
                 listOfSpaceObjects.Add(Bullet[numBullet]);
                 numBullet++;
             }
