@@ -9,6 +9,7 @@
         Height="800"
         Width="1200"
         Background="Black"
+        
        >
     <Window.DataContext>
         <local:MainModelView />
@@ -26,7 +27,8 @@
     <Canvas>
         <Image Height="800"
                Source="starry.jpg" />
-        <Menu Background="DarkGray"
+        <Menu Canvas.Left="400"
+            Background="DarkGray"
               Foreground="Black">
             <MenuItem Header="_File">
                 <MenuItem Header="_PlayAgain"
@@ -41,24 +43,33 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
+            
             <ListView x:Name="listViewPictures"
                       ItemsSource="{Binding Path=ViewPictures}"
                       SelectedIndex="0">
                 <ListView.View>
                     <GridView>
+                        <GridViewColumn Header="ID"
+                                        DisplayMemberBinding="{Binding Id}" />
                         <GridViewColumn Header="Name"
-                                        DisplayMemberBinding="{Binding Name}" />
+                                        DisplayMemberBinding="{Binding Type}" />
                     </GridView>
                 </ListView.View>
             </ListView>
 
             <ListView x:Name="listViewInfo"
                       Grid.Column="1"
-                      ItemsSource="{Binding ElementName=listViewPictures Path=SelectedItem.Info}">
-                <GridViewColumn Header="Type"
+                      ItemsSource="{Binding ElementName=listViewPictures, Path=SelectedItem.ListOfPictures}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Id"
+                                    DisplayMemberBinding="{Binding Id}" />
+                        <GridViewColumn Header="Type"
                                 DisplayMemberBinding="{Binding Type}" />
-                <GridViewColumn Header="FileName"
-                                DisplayMemberBinding="{Binding FileName}" />
+                        <GridViewColumn Header="FileName"
+                                    DisplayMemberBinding="{Binding PictureName}" />
+                    </GridView>
+                </ListView.View>
             </ListView>
         </Grid> 
 

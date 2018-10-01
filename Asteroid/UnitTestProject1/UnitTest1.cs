@@ -1,4 +1,5 @@
 ﻿using System;
+using Asteroids;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTestProject1

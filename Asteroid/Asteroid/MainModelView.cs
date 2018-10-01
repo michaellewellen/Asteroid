@@ -22,7 +22,7 @@ namespace Asteroids
         private System.Timers.Timer aTimer;
         private int numBullet = 0;
 
-       
+
 
         public MainModelView()
         {
@@ -30,12 +30,12 @@ namespace Asteroids
             numAsteroids = NUM_ROCKS;
             numShips = NUM_SHIPS;
             // Initialize an array of rocks and bullets each rock will split into 4 smaller ones
-            Rock = new SpaceObject[NUM_ROCKS*4];
+            Rock = new SpaceObject[NUM_ROCKS * 4];
             Bullet = new SpaceObject[NUM_BULLETS];
 
             temp = new SpaceObject('G', 400, 250, 0, 0, 0);
             winGame = new SpaceObject('A', 400, 250, 0, 0, 0);
-          
+
 
 
             // Initialize a Ship pointing up, no velocity in middle of the board
@@ -55,29 +55,51 @@ namespace Asteroids
                 startX = 1100 * (rand.NextDouble());
                 startY = 700 * (rand.NextDouble());
                 angle = 360 * (rand.NextDouble());
-                Rock[i] = new SpaceObject('R', startX, startY, HEIGHT, VELOCITY/2, angle);
+                Rock[i] = new SpaceObject('R', startX, startY, HEIGHT, VELOCITY / 2, angle);
                 listOfSpaceObjects.Add(Rock[i]);
             }
-            
-                
-            SetTimer();
+            viewPictures = new ObservableCollection<Pictures>();
+            newPicture = new Pictures(1, "Asteroid");
+            newPicture.ListOfPictures.Add(new Details(1, "png", "Asteroid.png"));
+            viewPictures.Add(newPicture);
+
+            newPicture = new Pictures(2, "Ship");
+            newPicture.ListOfPictures.Add(new Details(1, "png", "ship.png"));
+            newPicture.ListOfPictures.Add(new Details(2, "png", "shipwithflames.png"));
+            viewPictures.Add(newPicture);
+
+            newPicture = new Pictures(3, "Bullet");
+            newPicture.ListOfPictures.Add(new Details(1, "png", "sparkball.png"));
+            newPicture.ListOfPictures.Add(new Details(2, "png", "bullet.png"));
+            newPicture.ListOfPictures.Add(new Details(3, "png", "fireball.png"));
+            viewPictures.Add(newPicture);
+
 
             //  Making a Master list for HW #5
-            _pictureList = new ObservableCollection<Pictures>();
 
-            NewPicture = new Pictures(1, "Asteroid");
-            NewPicture.ListOfNewPictures.Add(new Details("Asteroid", "Asteroid.png"));
-            _pictureList.Add(NewPicture);
+            //NewPicture = new Pictures(1, "Asteroid");
+            //NewPicture.ListOfNewPictures.Add(new Details("Asteroid", "Asteroid.png"));
+            //_pictureList.Add(NewPicture);
 
-            NewPicture = new Pictures(2, "Ship");
-            NewPicture.Info.Add(new Details("Ship", "ship.png"));
-            NewPicture.Info.Add(new Details("Ship", "shipwithflames.png"));
-            _pictureList.Add(NewPicture);
+            //NewPicture = new Pictures(2, "Ship");
+            //NewPicture.Info.Add(new Details("Ship", "ship.png"));
+            //NewPicture.Info.Add(new Details("Ship", "shipwithflames.png"));
+            //_pictureList.Add(NewPicture);
+
+            //NewPicture = 
+            SetTimer();
         }
 
-      
+    private ObservableCollection<Pictures> viewPictures;
+        public ObservableCollection<Pictures> ViewPictures
+        {
+            get { return viewPictures; }
+            
+        }
 
-        private ObservableCollection<SpaceObject> listOfSpaceObjects;
+    
+
+    private ObservableCollection<SpaceObject> listOfSpaceObjects;
         public ObservableCollection<SpaceObject> ListOfSpaceObjects
         {
             get { return listOfSpaceObjects; }
@@ -336,6 +358,7 @@ namespace Asteroids
         public int numShips { get; private set; }
         public SpaceObject temp { get; private set; }
         public SpaceObject winGame { get; private set; }
+        public Pictures newPicture { get; private set; }
         
         public class ActionCommand : ICommand
         {
