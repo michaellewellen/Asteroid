@@ -16,25 +16,25 @@ namespace Asteroids
         {
             if (type == 'S')
             {
-                _Image = new BitmapImage(new Uri(@"/ship.png", UriKind.Relative));
+                _Image = new BitmapImage(new Uri(@"Resources\ship.png", UriKind.Relative));
             }
             else if (type == 'B')
             {
-                _Image = new BitmapImage(new Uri(@"/sparkball.png", UriKind.Relative));
+                _Image = new BitmapImage(new Uri(@"Resources\sparkball.png", UriKind.Relative));
             }
             else if (type == 'R')
             {
-                _Image = new BitmapImage(new Uri(@"/Asteroid.png", UriKind.Relative));
+                _Image = new BitmapImage(new Uri(@"Resources\Asteroid.png", UriKind.Relative));
             }
 
             else if (type == 'G')
             {
-                _Image = new BitmapImage(new Uri(@"/gameover.png", UriKind.Relative));
+                _Image = new BitmapImage(new Uri(@"Resources\gameover.png", UriKind.Relative));
             }
 
             else if (type == 'A')
             {
-                _Image = new BitmapImage(new Uri(@"/youwin.png", UriKind.Relative));        
+                _Image = new BitmapImage(new Uri(@"Resources\youwin.png", UriKind.Relative));        
             }
             XCoordinate = xCoordinate;
             YCoordinate = yCoordinate;

@@ -67,9 +67,6 @@
     <Compile Include="Bullet.cs" />
     <Compile Include="ItemChangeObservableCollection.cs" />
     <Compile Include="MainModelView.cs" />
-    <Compile Include="Pictures.cs" />
-    <Compile Include="Rock.cs" />
-    <Compile Include="Ship.cs" />
     <Compile Include="SpaceObject.cs" />
     <Page Include="AsteroidsControlWindow.xaml">
       <SubType>Designer</SubType>
@@ -116,34 +113,34 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Asteroid.png" />
+    <Resource Include="Resources\Asteroid.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="starry.jpg" />
+    <Resource Include="Resources\starry.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ship.png" />
+    <Resource Include="Resources\ship.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="purple.jpg" />
+    <Resource Include="Resources\purple.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="fireball.png" />
+    <Resource Include="Resources\fireball.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="sparkball.png" />
+    <Resource Include="Resources\sparkball.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="bullet.png" />
+    <Resource Include="Resources\bullet.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="gameover.png" />
+    <Resource Include="Resources\gameover.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="youwin.png" />
+    <Resource Include="Resources\youwin.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="shipwithflame.png" />
+    <Resource Include="Resources\shipwithflame.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

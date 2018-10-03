@@ -10,6 +10,7 @@
         Width="1200"
         Background="Black"
         
+        
        >
     <Window.DataContext>
         <local:MainModelView />
@@ -26,9 +27,8 @@
     </Window.InputBindings>
     <Canvas>
         <Image Height="800"
-               Source="starry.jpg" />
-        <Menu Canvas.Left="400"
-            Background="DarkGray"
+               Source="Resources\starry.jpg" />
+        <Menu Background="DarkGray"
               Foreground="Black">
             <MenuItem Header="_File">
                 <MenuItem Header="_PlayAgain"
@@ -38,7 +38,7 @@
 
             </MenuItem>
         </Menu>
-        <Grid>
+        <!--<Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -71,7 +71,7 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-        </Grid> 
+        </Grid>--> 
 
         <ItemsControl ItemsSource="{Binding Path=ListOfSpaceObjects}">
             <ItemsControl.ItemsPanel>
@@ -103,6 +103,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        
         <!--<Image Height="{Binding Height}"
                Canvas.Left="{Binding XCoordinate}"
                Canvas.Top="{Binding YCoordinate}"
@@ -172,3 +173,4 @@
         </Image>-->
     </Canvas>
 </Window>
+    
