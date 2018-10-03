@@ -12,10 +12,10 @@ namespace UnitTestProject2
         [TestMethod]
         public void SetPictureTest()
         {
-            Pictures TestProject1 = new Pictures(1, "Test");
+            SpaceObject TestProject1 = new SpaceObject('G', 0, 0, 20, 2, 0);
 
-            Assert.AreNotEqual(2, TestProject1.Id);
-            Assert.AreEqual("Test", TestProject1.Type);
+            Assert.AreNotEqual(2, TestProject1.XCoordinate);
+            Assert.AreEqual(0, TestProject1.Theta);
 
         }
     }
