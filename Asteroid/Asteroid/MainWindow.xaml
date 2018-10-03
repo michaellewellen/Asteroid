@@ -29,40 +29,7 @@
 
             </MenuItem>
         </Menu>
-        <!--<Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            
-            <ListView x:Name="listViewPictures"
-                      ItemsSource="{Binding Path=ViewPictures}"
-                      SelectedIndex="0">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="ID"
-                                        DisplayMemberBinding="{Binding Id}" />
-                        <GridViewColumn Header="Name"
-                                        DisplayMemberBinding="{Binding Type}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
-
-            <ListView x:Name="listViewInfo"
-                      Grid.Column="1"
-                      ItemsSource="{Binding ElementName=listViewPictures, Path=SelectedItem.ListOfPictures}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Id"
-                                    DisplayMemberBinding="{Binding Id}" />
-                        <GridViewColumn Header="Type"
-                                DisplayMemberBinding="{Binding Type}" />
-                        <GridViewColumn Header="FileName"
-                                    DisplayMemberBinding="{Binding PictureName}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </Grid>-->
+        
         <TextBlock Text="{Binding ObjectCount}" />
         <ItemsControl ItemsSource="{Binding Path=ListOfSpaceObjects}">
             <ItemsControl.ItemsPanel>
@@ -95,73 +62,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
         
-        <!--<Image Height="{Binding Height}"
-               Canvas.Left="{Binding XCoordinate}"
-               Canvas.Top="{Binding YCoordinate}"
-               Source="ship.png"
-               DataContext="{Binding Player1Ship}">
-            <Image.RenderTransform>
-                <RotateTransform Angle="{Binding Theta}"
-                                 CenterX="12"
-                                 CenterY="12" />
-            </Image.RenderTransform>
-                    
-        </Image>-->
-        <!--<Image DataContext="{Binding RockObject[0]}"
-               Height="{Binding Height}"
-               Canvas.Left="{Binding XCoordinate}"
-               Canvas.Top="{Binding YCoordinate}"
-               Source="Asteroid.png">
-            <Image.RenderTransform>
-                <RotateTransform Angle="{Binding Theta}"
-                                 CenterX="50"
-                                 CenterY="50" />
-            </Image.RenderTransform>
-        </Image>
-        <Image DataContext="{Binding RockObject[1]}"
-               Height="{Binding Height}"
-               Canvas.Left="{Binding XCoordinate}"
-               Canvas.Top="{Binding YCoordinate}"
-               Source="Asteroid.png">
-            <Image.RenderTransform>
-                <RotateTransform Angle="{Binding Theta}"
-                                 CenterX="50"
-                                 CenterY="50" />
-            </Image.RenderTransform>
-        </Image>
-        <Image DataContext="{Binding RockObject[2]}"
-               Height="{Binding Height}"
-               Canvas.Left="{Binding XCoordinate}"
-               Canvas.Top="{Binding YCoordinate}"
-               Source="Asteroid.png">
-            <Image.RenderTransform>
-                <RotateTransform Angle="{Binding Theta}"
-                                 CenterX="50"
-                                 CenterY="50" />
-            </Image.RenderTransform>
-        </Image>
-        <Image DataContext="{Binding RockObject[3]}"
-               Height="{Binding Height}"
-               Canvas.Left="{Binding XCoordinate}"
-               Canvas.Top="{Binding YCoordinate}"
-               Source="Asteroid.png">
-            <Image.RenderTransform>
-                <RotateTransform Angle="{Binding Theta}"
-                                 CenterX="50"
-                                 CenterY="50" />
-            </Image.RenderTransform>
-        </Image>
-        <Image DataContext="{Binding RockObject[4]}"
-               Height="{Binding Height}"
-               Canvas.Left="{Binding XCoordinate}"
-               Canvas.Top="{Binding YCoordinate}"
-               Source="Asteroid.png">
-            <Image.RenderTransform>
-                <RotateTransform Angle="{Binding Theta}"
-                                 CenterX="50"
-                                 CenterY="50" />
-            </Image.RenderTransform>
-        </Image>-->
+       
     </Canvas>
 </Window>
     
