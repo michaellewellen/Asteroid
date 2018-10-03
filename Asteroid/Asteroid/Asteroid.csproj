@@ -61,10 +61,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AsteroidsControlWindow.xaml.cs">
+      <DependentUpon>AsteroidsControlWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Bullet.cs" />
     <Compile Include="ItemChangeObservableCollection.cs" />
     <Compile Include="MainModelView.cs" />
     <Compile Include="SpaceObject.cs" />
+    <Page Include="AsteroidsControlWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
