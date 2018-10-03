@@ -12,8 +12,13 @@ namespace Asteroids
 {
     public class SpaceObject :INotifyPropertyChanged
     {
+        static private int nextObjectID=0;
+        private readonly int objectID = nextObjectID++;
+        public char Type { get; }
+
         public SpaceObject(char type, double xCoordinate, double yCoordinate, double height, double velocity, double theta)
         {
+            this.Type = type;
             if (type == 'S')
             {
                 _Image = new BitmapImage(new Uri(@"Resources\ship.png", UriKind.Relative));
@@ -47,6 +52,11 @@ namespace Asteroids
             NumberOfHits = 0;
 
 
+        }
+
+        public override string ToString()
+        {
+            return $"{Type} (# {objectID})";
         }
 
         private int numberOfHits;

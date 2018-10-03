@@ -9,22 +9,13 @@
         Height="800"
         Width="1200"
         Background="Black"
-        
-        
+        KeyDown="KeyPressed"
+        KeyUp="KeyReleased"        
        >
     <Window.DataContext>
         <local:MainModelView />
     </Window.DataContext>
-    <Window.InputBindings>
-        <KeyBinding Command="{Binding MainModelView_AKeyDown}"
-                    Key="A" />
-        <KeyBinding Command="{Binding MainModelView_DKeyDown}"
-                    Key="D" />
-        <KeyBinding Command="{Binding MainModelView_WKeyDown}"
-                    Key="W" />
-        <KeyBinding Command="{Binding MainModelView_SpaceKeyDown}"
-                    Key="Space"/>
-    </Window.InputBindings>
+    
     <Canvas>
         <Image Height="800"
                Source="Resources\starry.jpg" />
@@ -71,8 +62,8 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-        </Grid>--> 
-
+        </Grid>-->
+        <TextBlock Text="{Binding ObjectCount}" />
         <ItemsControl ItemsSource="{Binding Path=ListOfSpaceObjects}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

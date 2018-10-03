@@ -36,18 +36,19 @@ namespace Asteroids
             System.Windows.Application.Current.Shutdown();
         }
 
-        //private void KeyReleased(object sender, KeyEventArgs e)
-        //{
-        //    var VM = (MainModelView)DataContext;
-        //    VM.KeyReleased(e.Key);
-        //}
-        //private void KeyPressed(object sender, KeyEventArgs e)
-        //{
-        //    var VM = (MainModelView)DataContext;
-        //    if (VM == null)
-        //        return;
-        //    VM.KeyPressed(e.Key);
-        //}
+
+        private void KeyReleased(object sender, KeyEventArgs e)
+        {
+            var VM = (MainModelView)DataContext;
+            VM.KeyReleased(e.Key);
+        }
+        private void KeyPressed(object sender, KeyEventArgs e)
+        {
+            var VM = (MainModelView)DataContext;
+            if (VM == null)
+                return;
+            VM.KeyPressed(e.Key);
+        }
 
     }
 }

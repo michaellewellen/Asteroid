@@ -5,8 +5,10 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace Asteroids
 {
@@ -14,13 +16,14 @@ namespace Asteroids
     {
         public const int WINDOWHEIGHT = 800;
         public const int WINDOWWIDTH = 1200;
-        public const int NUM_ROCKS = 5;
-        public const int NUM_BULLETS = 20;
+        public const int NUM_ROCKS = 20;
+        public const int NUM_BULLETS = 1;
         public const int VELOCITY = 4;
         public const int HEIGHT = 100;
         public const int NUM_SHIPS = 3;
         private System.Timers.Timer aTimer;
         private int numBullet = 0;
+     
 
 
 
@@ -30,8 +33,6 @@ namespace Asteroids
             numAsteroids = NUM_ROCKS;
             numShips = NUM_SHIPS;
             // Initialize an array of rocks and bullets each rock will split into 4 smaller ones
-            Rock = new SpaceObject[NUM_ROCKS * 4];
-            Bullet = new SpaceObject[NUM_BULLETS];
 
             temp = new SpaceObject('G', 400, 250, 0, 0, 0);
             winGame = new SpaceObject('A', 400, 250, 0, 0, 0);
@@ -40,6 +41,7 @@ namespace Asteroids
             Player1Ship = new SpaceObject('S', 600, 400, 25, 0, -90);
             listLock = new object();
             listOfSpaceObjects = new ObservableCollection<SpaceObject>();
+            ListOfSpaceObjects.CollectionChanged += (s, args) => ObjectCount = ListOfSpaceObjects.Count;
             BindingOperations.EnableCollectionSynchronization(listOfSpaceObjects, listLock);
 
             listOfSpaceObjects.Add(Player1Ship);
@@ -53,128 +55,99 @@ namespace Asteroids
                 startX = 1100 * (rand.NextDouble());
                 startY = 700 * (rand.NextDouble());
                 angle = 360 * (rand.NextDouble());
-                Rock[i] = new SpaceObject('R', startX, startY, HEIGHT, VELOCITY / 2, angle);
-                listOfSpaceObjects.Add(Rock[i]);
+                var rock = new SpaceObject('R', startX, startY, HEIGHT, VELOCITY / 2, angle);
+                listOfSpaceObjects.Add(rock);
             }
             SetTimer();
         }
 
+        internal void KeyPressed(Key key)
+        {
+            switch (key)
+            {
+                case Key.A:
+                    MoveShipLeft(true);
+                    break;
+                case Key.D:
+                    MoveShipRight(true);
+                    break;
+                case Key.W:
+                    MoveShip(true);
+                    break;
+                case Key.Space:
+                    FireBullet(true);
+                    break;
+                default: break;
+            }
+        }
+
         internal void KeyReleased(Key key)
         {
-           // bool Accelerate = false;
-            throw new NotImplementedException();
-        }
-
-       
-
-    
-
-    private ObservableCollection<SpaceObject> listOfSpaceObjects;
-        public ObservableCollection<SpaceObject> ListOfSpaceObjects
-        {
-            get { return listOfSpaceObjects; }
-        }
-        
- 
-        private ICommand mainModelView_AKeyDown;
-        public ICommand MainModelView_AKeyDown
-        {
-
-            get
+            switch (key)
             {
-                return mainModelView_AKeyDown
-                    ?? (mainModelView_AKeyDown = new ActionCommand(() =>
-                    {
-                        MoveShipLeft();
-                    }));
+                case Key.A:
+                    MoveShipLeft(false);
+                    break;
+                case Key.D:
+                    MoveShipRight(false);
+                    break;
+                case Key.W:
+                    MoveShip(false);
+                    break;
+                case Key.Space:
+                    FireBullet(false);
+                    break;
+                default: break;
             }
         }
 
-        protected void MoveShipLeft()
+        public void FireBullet(bool change)
         {
-            if( numShips > 0 )
-                Player1Ship.Theta -= 3;
-        }
-
-        private ICommand mainModelView_SpaceKeyDown;
-        public ICommand MainModelView_SpaceKeyDown
-        {
-
-            get
-            {
-                
-                return mainModelView_SpaceKeyDown
-                    ?? (mainModelView_SpaceKeyDown = new ActionCommand(() =>
-                    {
-                        FireBullet();
-                    }));
-            }
-        }
-
-        public void FireBullet()
-        {
-            if (numShips > 0)
+            shoot = change;
+            if (shoot)
             {
                 if (numBullet >= NUM_BULLETS)
-                numBullet = 0;
-                Bullet[numBullet] = new SpaceObject('B', Player1Ship.XCoordinate+8, Player1Ship.YCoordinate+8, 10, 4 * VELOCITY, Player1Ship.Theta);
-                listOfSpaceObjects.Add(Bullet[numBullet]);
+                    numBullet = 0;
+
+                var bullet = new SpaceObject('B', Player1Ship.XCoordinate + 8, Player1Ship.YCoordinate + 8, 10, 4 * VELOCITY, Player1Ship.Theta);
+                listOfSpaceObjects.Add(bullet);
                 numBullet++;
             }
         }
 
-        
-
-        private ICommand mainModelView_DKeyDown;
-        public ICommand MainModelView_DKeyDown
+        protected void MoveShipLeft(bool change)
         {
-
-            get
-            {
-                return mainModelView_DKeyDown
-                    ?? (mainModelView_DKeyDown = new ActionCommand(() =>
-                    {
-                        MoveShipRight();
-                    }));
-            }
-        }
-        protected void MoveShipRight()
-        {
-            if(numShips > 0)
-                Player1Ship.Theta += 3;
+            left = change;
+            
         }
 
-        private ICommand mainModelView_WKeyDown;
-        public ICommand MainModelView_WKeyDown
+        protected void MoveShipRight(bool change)
         {
-
-            get
-            {
-                return mainModelView_WKeyDown
-                    ?? (mainModelView_WKeyDown = new ActionCommand(() =>
-                    {
-                        Player1Ship.Velocity = 2*VELOCITY;
-                        MoveShip();
-                    }));
-            }
+            right = change;
+            
         }
-        protected void MoveShip()
+
+        protected void MoveShip(bool change)
         {
-            if (numShips > 0)
-            {
-                Player1Ship.XCoordinate += Player1Ship.Velocity * Math.Cos((Math.PI * Player1Ship.Theta / 180));
-                Player1Ship.YCoordinate += Player1Ship.Velocity * Math.Sin((Math.PI * Player1Ship.Theta / 180));
-                if (Player1Ship.XCoordinate > 1150)
-                    Player1Ship.XCoordinate = -50;
-                else if (Player1Ship.XCoordinate < -50)
-                    Player1Ship.XCoordinate = 1150;
-                if (Player1Ship.YCoordinate > 750)
-                    Player1Ship.YCoordinate = -50;
-                else if (Player1Ship.YCoordinate < -50)
-                    Player1Ship.YCoordinate = 750;
-            }
-
+            accel = change;
+            if(change == false)
+                Player1Ship._Image= new BitmapImage(new Uri(@"Resources\ship.png", UriKind.Relative));
+            else
+                Player1Ship._Image= new BitmapImage(new Uri(@"Resources\shipwithflame.png", UriKind.Relative));
         }
+        private ObservableCollection<SpaceObject> listOfSpaceObjects;
+        public ObservableCollection<SpaceObject> ListOfSpaceObjects
+        {
+            get { return listOfSpaceObjects; }
+        }
+
+        private int objectCount;
+        public int ObjectCount
+        {
+            get { return objectCount; }
+            set { SetField(ref objectCount, value); }
+        }
+
 
 
 
@@ -188,14 +161,15 @@ namespace Asteroids
 
         private void ATimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            // Check for Game Over
-            if (numShips == 0)
-                temp.Height = 200;
-            // Check for win
-            if (numAsteroids <= 0)
-                winGame.Height = 200;
+            // These are win/lose graphics that will not be part of the final project.
+            //// Check for Game Over
+            //if (numShips == 0)
+            //    temp.Height = 200;
+            //// Check for win
+            //if (numAsteroids <= 0)
+            //    winGame.Height = 200;
             //// Move the rocks
-            foreach (SpaceObject r in Rock)
+            foreach (SpaceObject r in Rocks)
             {
                 if (r != null)
                 {
@@ -215,98 +189,112 @@ namespace Asteroids
             }
 
             //// Move the ship
+            if (accel)
+            {
+                if (Player1Ship.Velocity <= 2*VELOCITY)
+                    Player1Ship.Velocity += .1;
+            }
+            else
+            {
+                if (Player1Ship.Velocity <= 0)
+                    Player1Ship.Velocity = 0;
+                else
+                    Player1Ship.Velocity -= .1;
+            }
+
+            if(left)
+            {
+                Player1Ship.Theta -= 3;
+            }
+            if (right)
+            {
+                Player1Ship.Theta += 3;
+            }
+
+
+            Player1Ship.XCoordinate += Player1Ship.Velocity * Math.Cos((Math.PI * Player1Ship.Theta / 180));
+                Player1Ship.YCoordinate += Player1Ship.Velocity * Math.Sin((Math.PI * Player1Ship.Theta / 180));
+                if (Player1Ship.XCoordinate > 1150)
+                    Player1Ship.XCoordinate = -50;
+                else if (Player1Ship.XCoordinate < -50)
+                    Player1Ship.XCoordinate = 1150;
+                if (Player1Ship.YCoordinate > 750)
+                    Player1Ship.YCoordinate = -50;
+                else if (Player1Ship.YCoordinate < -50)
+                    Player1Ship.YCoordinate = 750;
 
 
             ////  Move the bullets
-            foreach (SpaceObject b in Bullet)
+            for (int i =0; i<Bullets.Count();i++)
+            
             {
+                var b = Bullets.Skip(i).First();
                 if (b != null)
                 {
                     b.XCoordinate += b.Velocity * Math.Cos(Math.PI * b.Theta / 180);
                     b.YCoordinate += b.Velocity * Math.Sin(Math.PI * b.Theta / 180);
+                    if (b.XCoordinate > 1150 || b.XCoordinate < -50 || b.YCoordinate > 750 || b.YCoordinate < -50)
+                        RemoveSpaceObject(b);
                 }
             }
 
             // Check for collisions. If bullet hits rock, remove/split rock if rock hits ship, reset ship
-            for (int i = 0; i < NUM_ROCKS * 4; i++)
+            for(int i = 0; i < Rocks.Count(); i++)
             {
-                if (Rock[i] != null)
+                var rock = Rocks.Skip(i).First();
+                if (rock != null)
                 {
                     // Check against Bullets
-                    foreach (SpaceObject b in Bullet)
+                    for (int j = 0; j < Bullets.Count(); j++)
                     {
+                        var b = Bullets.Skip(j).First();
                         if (b != null)
                         {
-                            if (((b.XCoordinate > Rock[i].XCoordinate && b.XCoordinate < Rock[i].XCoordinate + Rock[i].Height) || 
-                                (b.XCoordinate + 5 > Rock[i].XCoordinate && b.XCoordinate + 5 < Rock[i].XCoordinate + Rock[i].Height)) &&
-                                ((b.YCoordinate > Rock[i].YCoordinate && b.YCoordinate < Rock[i].YCoordinate + Rock[i].Height) || 
-                                (b.YCoordinate + 5 > Rock[i].YCoordinate && b.YCoordinate + 5 < Rock[i].YCoordinate + Rock[i].Height)))
+                            if (((b.XCoordinate > rock.XCoordinate && b.XCoordinate < rock.XCoordinate + rock.Height) ||
+                                (b.XCoordinate + 5 > rock.XCoordinate && b.XCoordinate + 5 < rock.XCoordinate + rock.Height)) &&
+                                ((b.YCoordinate > rock.YCoordinate && b.YCoordinate < rock.YCoordinate + rock.Height) ||
+                                (b.YCoordinate + 5 > rock.YCoordinate && b.YCoordinate + 5 < rock.YCoordinate + rock.Height)))
                             {
                                 b.Height = 0;
-                                RemoveSpaceObject(Rock[i], i);
+                                RemoveSpaceObject(rock);
+                                RemoveSpaceObject(b);
                             }
                         }
                     }
 
-                    if (((Player1Ship.XCoordinate > Rock[i].XCoordinate && Player1Ship.XCoordinate < Rock[i].XCoordinate + Rock[i].Height) ||
-                                (Player1Ship.XCoordinate + Player1Ship.Height > Rock[i].XCoordinate && Player1Ship.XCoordinate + Player1Ship.Height < Rock[i].XCoordinate + Rock[i].Height)) &&
-                                ((Player1Ship.YCoordinate > Rock[i].YCoordinate && Player1Ship.YCoordinate < Rock[i].YCoordinate + Rock[i].Height) ||
-                                (Player1Ship.YCoordinate + Player1Ship.Height > Rock[i].YCoordinate && Player1Ship.YCoordinate + Player1Ship.Height < Rock[i].YCoordinate + Rock[i].Height)))
+                    if (((Player1Ship.XCoordinate > rock.XCoordinate && Player1Ship.XCoordinate < rock.XCoordinate + rock.Height) ||
+                                (Player1Ship.XCoordinate + Player1Ship.Height > rock.XCoordinate && Player1Ship.XCoordinate + Player1Ship.Height < rock.XCoordinate + rock.Height)) &&
+                                ((Player1Ship.YCoordinate > rock.YCoordinate && Player1Ship.YCoordinate < rock.YCoordinate + rock.Height) ||
+                                (Player1Ship.YCoordinate + Player1Ship.Height > rock.YCoordinate && Player1Ship.YCoordinate + Player1Ship.Height < rock.YCoordinate + rock.Height)))
                     {
                         Player1Ship.XCoordinate = 600;
                         Player1Ship.YCoordinate = 400;
                         Player1Ship.Theta = -90;
                         numShips--;
-                        if(numShips == 0)
+                        if (numShips == 0)
                         {
                             //Display Game Over Graphic
                         }
                     }
                 }
             }
-        }
-                
-
-
-        public void RemoveSpaceObject(SpaceObject so, int i)
-        {
-            //if(so.NumberOfHits == 0) // first hit
-            //{
-            //    lock(listLock)
-            //    {
-            //        listOfSpaceObjects.Remove(Rock[i]);
-            //        Rock[i] = new SpaceObject('R', so.XCoordinate, so.XCoordinate, so.Height / 2, so.Velocity, so.Theta + 30);
-            //        Rock[i + 2] = new SpaceObject('R', so.XCoordinate, so.XCoordinate, so.Height / 2, so.Velocity, so.Theta - 30);
-            //        Rock[i].NumberOfHits++;
-            //        Rock[i + 2].NumberOfHits++;
-            //        listOfSpaceObjects.Add(Rock[i]);
-            //        listOfSpaceObjects.Add(Rock[i + 2]);
-            //    }
-            //}
-            //else if(so.NumberOfHits == 1) // second hit
-            //{
-            //    Rock[i] = new SpaceObject('R', so.XCoordinate, so.XCoordinate, so.Height / 2, so.Velocity, so.Theta + 30);
-            //    Rock[i + 1] = new SpaceObject('R', so.XCoordinate, so.XCoordinate, so.Height / 2, so.Velocity, so.Theta - 30);
-            //    Rock[i].NumberOfHits++;
-            //    Rock[i + 1].NumberOfHits++;
-            //}
-
-            //else
-            {
-                Rock[i].Height = 0;
-                numAsteroids--;
-                if(numAsteroids == 0)
-                {
-                    // Print you win message on the screen
-                }
-            }
             
+        }
+
+
+
+        public void RemoveSpaceObject(SpaceObject so)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                ListOfSpaceObjects.Remove(so);
+            }));
         }
 
         public void ShipHit()
         {
             // Maybe some explosion noise, and an explosion graphic?
-            
+
             {
                 Player1Ship.Velocity = 0;
                 Player1Ship.XCoordinate = 600;
@@ -322,15 +310,19 @@ namespace Asteroids
             //}
         }
         public SpaceObject Player1Ship { get; private set; }
-        public SpaceObject[] Bullet { get; private set; }
-        public SpaceObject[] Rock { get; private set; }
+        public IEnumerable<SpaceObject> Bullets => ListOfSpaceObjects.Where(so => so.Type == 'B');
+        public IEnumerable<SpaceObject> Rocks => ListOfSpaceObjects.Where(so => so.Type == 'R');
+        //public SpaceObject[] Rock { get; private set; }
         public object listLock { get; private set; }
         public int numAsteroids { get; private set; }
         public int numShips { get; private set; }
         public SpaceObject temp { get; private set; }
         public SpaceObject winGame { get; private set; }
-        
-        
+        public bool shoot { get; private set; }
+        public bool accel { get; private set; }
+        public bool left { get; private set; }
+        public bool right { get; private set; }
+
         public class ActionCommand : ICommand
         {
             private readonly Action _action;
