@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Height="800"
-        Width="1200"
+        Width="1400"
         Background="Black"
         KeyDown="KeyPressed"
         KeyUp="KeyReleased"        

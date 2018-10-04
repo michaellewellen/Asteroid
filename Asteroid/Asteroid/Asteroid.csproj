@@ -135,6 +135,12 @@
   <ItemGroup>
     <Resource Include="Resources\shipwithflame.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\p2withflame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\p2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

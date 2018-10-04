@@ -22,24 +22,40 @@ namespace Asteroids
             if (type == 'S')
             {
                 _Image = new BitmapImage(new Uri(@"Resources\ship.png", UriKind.Relative));
+                CollisionBoxSize = 25;
             }
             else if (type == 'B')
             {
                 _Image = new BitmapImage(new Uri(@"Resources\sparkball.png", UriKind.Relative));
+                CollisionBoxSize = 5;
+            }
+            else if (type == 'F')
+            {
+                _Image = new BitmapImage(new Uri(@"Resources\fireball.png", UriKind.Relative));
+                CollisionBoxSize = 5;
             }
             else if (type == 'R')
             {
                 _Image = new BitmapImage(new Uri(@"Resources\Asteroid.png", UriKind.Relative));
+                CollisionBoxSize = 100;
             }
 
             else if (type == 'G')
             {
                 _Image = new BitmapImage(new Uri(@"Resources\gameover.png", UriKind.Relative));
+                CollisionBoxSize = 0;
             }
 
             else if (type == 'A')
             {
-                _Image = new BitmapImage(new Uri(@"Resources\youwin.png", UriKind.Relative));        
+                _Image = new BitmapImage(new Uri(@"Resources\youwin.png", UriKind.Relative));
+                CollisionBoxSize = 0;
+            }
+
+            else if (type == 'E')
+            {
+                _Image = new BitmapImage(new Uri(@"Resources\p2.png", UriKind.Relative));
+                CollisionBoxSize = 25;
             }
             XCoordinate = xCoordinate;
             YCoordinate = yCoordinate;
@@ -50,8 +66,6 @@ namespace Asteroids
             CY = Height / 2;
             Velocity = velocity;
             NumberOfHits = 0;
-
-
         }
 
         public override string ToString()
@@ -59,6 +73,7 @@ namespace Asteroids
             return $"{Type} (# {objectID})";
         }
 
+        private int collisionBoxSize;
         private int numberOfHits;
         private double originalAngle;
         private double xCoordinate;
@@ -69,6 +84,12 @@ namespace Asteroids
         private BitmapImage _image;
         private double cX;
         private double cY;
+
+        public int CollisionBoxSize
+        {
+            get { return collisionBoxSize; }
+            set { SetField(ref collisionBoxSize, value); }
+        }
 
         public int NumberOfHits
         {
