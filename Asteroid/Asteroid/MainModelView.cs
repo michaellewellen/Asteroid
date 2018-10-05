@@ -105,16 +105,16 @@ namespace Asteroids
                 case Key.Space:
                     FireBullet(false);
                     break;
-                case Key.D4:
+                case Key.NumPad4:
                     EnemyMoveShipLeft(false);
                     break;
-                case Key.D6:
+                case Key.NumPad6:
                     EnemyMoveShipRight(false);
                     break;
-                case Key.D8:
+                case Key.NumPad8:
                     EnemyMoveShip(false);
                     break;
-                case Key.D0:
+                case Key.NumPad0:
                     FireEnemyBullet(false);
                     break;
                 default: break;
@@ -137,7 +137,9 @@ namespace Asteroids
                 Player1Ship._Image = new BitmapImage(new Uri(@"Resources\ship.png", UriKind.Relative));
             }
             else
+            {
                 Player1Ship._Image = new BitmapImage(new Uri(@"Resources\shipwithflame.png", UriKind.Relative));
+            }
         }
         public void FireBullet(bool change)
         {
@@ -169,7 +171,7 @@ namespace Asteroids
                 Player2Ship._Image = new BitmapImage(new Uri(@"Resources\p2.png", UriKind.Relative));
             }
             else
-                Player1Ship._Image = new BitmapImage(new Uri(@"Resources\p2withflame.png", UriKind.Relative));
+                Player2Ship._Image = new BitmapImage(new Uri(@"Resources\p2withflame.png", UriKind.Relative));
         }
         public void FireEnemyBullet(bool change)
         {
@@ -207,8 +209,9 @@ namespace Asteroids
 
         private void ATimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            foreach (SpaceObject r in Rocks)
+            for (int i = 0; i < Rocks.Count(); i++)
             {
+                var r = Rocks.Skip(i).First();
                 if (r != null)
                 {
                     r.XCoordinate += r.Velocity * Math.Cos(Math.PI * r.OriginalAngle / 180);
@@ -227,6 +230,7 @@ namespace Asteroids
             }
 
             //// Move player 1
+            Player1Ship.Score++;
             if (accel)
             {
                 if (Player1Ship.Velocity <= 4*VELOCITY)
@@ -261,7 +265,9 @@ namespace Asteroids
                 else if (Player1Ship.YCoordinate < -50)
                     Player1Ship.YCoordinate = WINDOWHEIGHT-50;
 
-            // Move player 2 Ship
+            // Score increases for every millisecodn you're alive
+            Player2Ship.Score++;
+           // Move player 2 Ship
             if (enemyAccel)
             {
                 if (Player2Ship.Velocity <= 4 * VELOCITY)
@@ -304,24 +310,24 @@ namespace Asteroids
                 {
                     b.XCoordinate += b.Velocity * Math.Cos(Math.PI * b.Theta / 180);
                     b.YCoordinate += b.Velocity * Math.Sin(Math.PI * b.Theta / 180);
-                    if (b.XCoordinate > 1150 || b.XCoordinate < -50 || b.YCoordinate > 750 || b.YCoordinate < -50)
+                    if (b.XCoordinate > WINDOWWIDTH-50 || b.XCoordinate < -50 || b.YCoordinate > WINDOWHEIGHT-50 || b.YCoordinate < -50)
                         RemoveSpaceObject(b);
                 }
             }
             // Move enemy bullets
-            for (int i = 0; i < enemyBullets.Count(); i++)
+            for (int i = 0; i < EnemyBullets.Count(); i++)
 
             {
-                var b = enemyBullets.Skip(i).First();
+                var b = EnemyBullets.Skip(i).First();
                 if (b != null)
                 {
                     b.XCoordinate += b.Velocity * Math.Cos(Math.PI * b.Theta / 180);
                     b.YCoordinate += b.Velocity * Math.Sin(Math.PI * b.Theta / 180);
-                    if (b.XCoordinate > 1150 || b.XCoordinate < -50 || b.YCoordinate > 750 || b.YCoordinate < -50)
+                    if (b.XCoordinate > WINDOWWIDTH-50 || b.XCoordinate < -50 || b.YCoordinate > WINDOWHEIGHT-50 || b.YCoordinate < -50)
                         RemoveSpaceObject(b);
                 }
             }
-            // Check for collisions ... Alternative method 
+            
 
             // Check for collisions. If bullet hits rock, remove/split rock if rock hits ship, reset ship
             for (int i = 0; i < Rocks.Count(); i++)
@@ -329,7 +335,7 @@ namespace Asteroids
                 var rock = Rocks.Skip(i).First();
                 if (rock != null)
                 {
-                    // Check against Bullets
+                    // Check against Player 1 Bullets
                     for (int j = 0; j < Bullets.Count(); j++)
                     {
                         var b = Bullets.Skip(j).First();
@@ -340,8 +346,46 @@ namespace Asteroids
                                 ((b.YCoordinate > rock.YCoordinate && b.YCoordinate < rock.YCoordinate + rock.Height) ||
                                 (b.YCoordinate + 5 > rock.YCoordinate && b.YCoordinate + 5 < rock.YCoordinate + rock.Height)))
                             {
+                                 Player1Ship.Score += Math.Pow((rock.NumberOfHits+1),2) * 100;
                                 RemoveSpaceObject(rock);
                                 RemoveSpaceObject(b);
+                            }
+
+                            if (((b.XCoordinate > Player2Ship.XCoordinate && b.XCoordinate < Player2Ship.XCoordinate + Player2Ship.Height) ||
+                                (b.XCoordinate + 5 > Player2Ship.XCoordinate && b.XCoordinate + 5 < Player2Ship.XCoordinate + Player2Ship.Height)) &&
+                                ((b.YCoordinate > Player2Ship.YCoordinate && b.YCoordinate < Player2Ship.YCoordinate + Player2Ship.Height) ||
+                                (b.YCoordinate + 5 > Player2Ship.YCoordinate && b.YCoordinate + 5 < Player2Ship.YCoordinate + Player2Ship.Height)))
+                            {
+                                RemoveSpaceObject(b);
+                                Player1Ship.Score += 500;
+                                EnemyShipHit();
+                            }
+                        }
+                    }
+
+                    // Chcek against Player2 Bullets
+                    for (int j = 0; j < EnemyBullets.Count(); j++)
+                    {
+                        var b = EnemyBullets.Skip(j).First();
+                        if (b != null)
+                        {
+                            if (((b.XCoordinate > rock.XCoordinate && b.XCoordinate < rock.XCoordinate + rock.Height) ||
+                                (b.XCoordinate + 5 > rock.XCoordinate && b.XCoordinate + 5 < rock.XCoordinate + rock.Height)) &&
+                                ((b.YCoordinate > rock.YCoordinate && b.YCoordinate < rock.YCoordinate + rock.Height) ||
+                                (b.YCoordinate + 5 > rock.YCoordinate && b.YCoordinate + 5 < rock.YCoordinate + rock.Height)))
+                            {
+                                Player2Ship.Score += Math.Pow((rock.NumberOfHits + 1), 2) * 100;
+                                RemoveSpaceObject(rock);
+                                RemoveSpaceObject(b);
+                            }
+                            if (((b.XCoordinate > Player1Ship.XCoordinate && b.XCoordinate < Player1Ship.XCoordinate + Player1Ship.Height) ||
+                                (b.XCoordinate + 5 > Player1Ship.XCoordinate && b.XCoordinate + 5 < Player1Ship.XCoordinate + Player1Ship.Height)) &&
+                                ((b.YCoordinate > Player1Ship.YCoordinate && b.YCoordinate < Player1Ship.YCoordinate + Player1Ship.Height) ||
+                                (b.YCoordinate + 5 > Player1Ship.YCoordinate && b.YCoordinate + 5 < Player1Ship.YCoordinate + Player1Ship.Height)))
+                            {
+                                RemoveSpaceObject(b);
+                                Player2Ship.Score += 5000;
+                                ShipHit();
                             }
                         }
                     }
@@ -352,10 +396,19 @@ namespace Asteroids
                                 (Player1Ship.YCoordinate + Player1Ship.Height > rock.YCoordinate && Player1Ship.YCoordinate + Player1Ship.Height < rock.YCoordinate + rock.Height)))
                     {
                         ShipHit();
-
+                    }
+                    if (((Player2Ship.XCoordinate > rock.XCoordinate && Player2Ship.XCoordinate < rock.XCoordinate + rock.Height) ||
+                                (Player2Ship.XCoordinate + Player2Ship.Height > rock.XCoordinate && Player2Ship.XCoordinate + Player2Ship.Height < rock.XCoordinate + rock.Height)) &&
+                                ((Player2Ship.YCoordinate > rock.YCoordinate && Player2Ship.YCoordinate < rock.YCoordinate + rock.Height) ||
+                                (Player2Ship.YCoordinate + Player2Ship.Height > rock.YCoordinate && Player1Ship.YCoordinate + Player1Ship.Height < rock.YCoordinate + rock.Height)))
+                    {
+                        EnemyShipHit();
                     }
                 }
             }
+
+            // Checking for bullets hitting ships and ships hitting ships.
+
 
         }
 
@@ -386,15 +439,37 @@ namespace Asteroids
             // Maybe some explosion noise, and an explosion graphic?
 
             {
-                Player1Ship.XCoordinate = 600;
-                Player1Ship.YCoordinate = 400;
-                Player1Ship.Theta = -90;
+                Random rand = new Random();
+                double temp = WINDOWWIDTH * (rand.NextDouble());
+                Player1Ship.XCoordinate = temp;
+                temp = WINDOWHEIGHT * (rand.NextDouble());
+                Player1Ship.YCoordinate = temp;
+                temp = 360 * (rand.NextDouble());
+                Player1Ship.Theta = temp;
                 Player1Ship.Velocity = 0;
+                Player1Ship.Score = 0;
+            }
+        }
+
+        public void EnemyShipHit()
+        {
+            // Maybe some explosion noise, and an explosion graphic?
+
+            {
+                Random rand = new Random();
+                double temp = WINDOWWIDTH * (rand.NextDouble());
+                Player2Ship.XCoordinate = temp;
+                temp = WINDOWHEIGHT * (rand.NextDouble());
+                Player2Ship.YCoordinate = temp;
+                temp = 360 * (rand.NextDouble());
+                Player2Ship.Theta = temp;
+                Player2Ship.Velocity = 0;
+                Player2Ship.Score = 0;
             }
         }
         public SpaceObject Player1Ship { get; private set; }
         public SpaceObject Player2Ship { get; private set; }
-        public IEnumerable<SpaceObject> enemyBullets => ListOfSpaceObjects.Where(so => so.Type == 'F');
+        public IEnumerable<SpaceObject> EnemyBullets => ListOfSpaceObjects.Where(so => so.Type == 'F');
         public IEnumerable<SpaceObject> Bullets => ListOfSpaceObjects.Where(so => so.Type == 'B');
         public IEnumerable<SpaceObject> Rocks => ListOfSpaceObjects.Where(so => so.Type == 'R');
         //public SpaceObject[] Rock { get; private set; }

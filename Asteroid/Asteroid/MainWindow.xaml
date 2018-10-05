@@ -19,18 +19,49 @@
     <Canvas>
         <Image Height="800"
                Source="Resources\starry.jpg" />
-        <Menu Background="DarkGray"
-              Foreground="Black">
-            <MenuItem Header="_File">
-                <MenuItem Header="_PlayAgain"
-                          Click="PlayAgain" />
-                <MenuItem Header="_Quit" Click="QuitGame" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Menu Grid.ColumnSpan="2"
+                  HorizontalAlignment="Left"
+                  Background="DarkGray"
+                  Foreground="Black">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_PlayAgain"
+                              Click="PlayAgain" />
+                    <MenuItem Header="_Quit"
+                              Click="QuitGame" />
 
 
-            </MenuItem>
-        </Menu>
-        
-        <TextBlock Text="{Binding ObjectCount}" />
+                </MenuItem>
+            </Menu>
+            <TextBlock Grid.Row="1"
+                       FontSize="20"
+                       Padding="10"
+                       Foreground="White">Player 1</TextBlock>
+            <TextBlock Grid.Row="1"
+                       Grid.Column="1"
+                       FontSize="20"
+                       Padding="10"
+                       Foreground="White">Player 2</TextBlock>
+            <TextBox DataContext="{Binding Player1Ship}"
+                     Text="{Binding Score}"
+                     Grid.Row="2"/>
+            <TextBox DataContext="{Binding Player2Ship}"
+                     Text="{Binding Score}"
+                     Grid.Row="2"
+                     Grid.Column="1"/>
+
+
+        </Grid>
+        <!--<TextBlock Text="{Binding ObjectCount}" />-->
         <ItemsControl ItemsSource="{Binding Path=ListOfSpaceObjects}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

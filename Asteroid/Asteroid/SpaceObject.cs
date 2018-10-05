@@ -57,6 +57,7 @@ namespace Asteroids
                 _Image = new BitmapImage(new Uri(@"Resources\p2.png", UriKind.Relative));
                 CollisionBoxSize = 25;
             }
+            Score = 0;
             XCoordinate = xCoordinate;
             YCoordinate = yCoordinate;
             OriginalAngle = theta;
@@ -84,6 +85,13 @@ namespace Asteroids
         private BitmapImage _image;
         private double cX;
         private double cY;
+        private double score;
+
+        public double Score
+        {
+            get { return score; }
+            set { SetField(ref score, value); }
+        }
 
         public int CollisionBoxSize
         {
