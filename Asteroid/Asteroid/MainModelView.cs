@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
@@ -16,7 +18,7 @@ namespace Asteroids
     {
         public const int WINDOWHEIGHT = 800;
         public const int WINDOWWIDTH = 1450;
-        public const int NUM_ROCKS = 15;
+        public const int NUM_ROCKS = 5;
         public const int VELOCITY = 4;
         public const int HEIGHT = 100;
         private System.Timers.Timer aTimer;
@@ -50,7 +52,29 @@ namespace Asteroids
                 var rock = new SpaceObject('R', startX, startY, HEIGHT, VELOCITY / 2, angle);
                 listOfSpaceObjects.Add(rock);
             }
+            EstablishConnections();
             SetTimer();
+        }
+
+
+        static TcpClient player1Client;
+        static TcpClient player2Client;
+        static NetworkStream player1Stream;
+        static NetworkStream player2Stream;
+
+        public void EstablishConnections()
+        {
+            TcpListener listener = new TcpListener(IPAddress.Loopback,30000);
+            listener.Start();
+            player1Client = listener.AcceptTcpClient();
+            player1Stream = player1Client.GetStream();
+            Console.WriteLine("Player1 Connected");
+
+            player2Client = listener.AcceptTcpClient();
+            player2Stream = player2Client.GetStream();
+            Console.WriteLine("Player2 Connected");
+
+
         }
 
 
@@ -210,7 +234,7 @@ namespace Asteroids
                 }
                 if (right)
                 {
-                    Player1Ship.Theta += 3;
+                    Player1Ship.Theta += 3 ;
                 }
 
                 if (shoot)  // add a bullet
